@@ -31,11 +31,12 @@ public class LoginScreen extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-
         jLabel4.setText("jLabel4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fluxio");
+        setLocation(new java.awt.Point(285, 111));
+        setPreferredSize(new java.awt.Dimension(970, 595));
         setBackground(java.awt.SystemColor.controlLtHighlight);
         setSize(new java.awt.Dimension(908, 519));
         setResizable(false); // Add this line here
@@ -75,7 +76,7 @@ public class LoginScreen extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font(".VnArial", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 51, 153));
-        jLabel1.setText("LOGIN");
+        jLabel1.setText("  LOGIN");
 
         jLabel2.setFont(new java.awt.Font(".VnArial", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
@@ -110,7 +111,7 @@ public class LoginScreen extends javax.swing.JFrame {
         });
 
         jButton1.setBackground(new java.awt.Color(0, 51, 153));
-        jButton1.setFont(new java.awt.Font(".VnArial", 0, 14)); // NOI18N
+        jButton1.setFont(new java.awt.Font(".VnArial", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
