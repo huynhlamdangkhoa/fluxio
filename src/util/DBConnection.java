@@ -11,17 +11,15 @@ import java.io.IOException;
 public class DBConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/inventorydatabase";
-    private static final String USER = "root"; // Change to your MySQL username
-    private static final String PASSWORD = "12345"; // Change to your MySQL password
+    private static final String USER = "root"; 
+    private static final String PASSWORD = "12345"; 
 
     private static Connection connection = null;
 
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                // Register MySQL driver
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                // Create the connection
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
                 System.out.println("Database connection established successfully!");
             } catch (ClassNotFoundException e) {
@@ -32,15 +30,15 @@ public class DBConnection {
         }
         return connection;
     }
-
-    public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
+    
+        public static void closeConnection(Connection c) {
+        try {
+            if (c != null && !c.isClosed()) {
+                c.close();
                 System.out.println("Database connection closed.");
-            } catch (SQLException e) {
-                System.err.println("Error closing the database connection: " + e.getMessage());
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -54,12 +52,22 @@ public class DBConnection {
                 sql.append(line).append("\n");
                 if (line.trim().endsWith(";")) {
                     stmt.execute(sql.toString());
-                    sql.setLength(0); // Clear the SQL buffer
+                    sql.setLength(0); 
                 }
             }
             System.out.println("SQL script executed successfully.");
         } catch (SQLException | IOException e) {
             System.err.println("Error executing SQL script: " + e.getMessage());
+        }
+    }
+    
+        public static void printInfo(Connection c) {
+        if(c!=null) {
+            try {
+                System.out.println((c.getMetaData().toString()));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

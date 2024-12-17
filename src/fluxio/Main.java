@@ -12,16 +12,15 @@ public class Main {
         loginFrame.pack();
         loginFrame.setLocationRelativeTo(null);
          
-        //Connect to database
-        Connection conn = DBConnection.getConnection();
+        Connection connection = DBConnection.getConnection();
+        DBConnection.printInfo(connection);
         
-        if (conn != null) {
-            String sqlFilePath = "src/util/inventorydatabase.sql"; // Đảm bảo đường dẫn chính xác
+        if (connection != null) {
+            String sqlFilePath = "src/util/inventorydatabase.sql"; 
             DBConnection.runSQLScript(sqlFilePath);
         }
         
-        // Đóng kết nối
-        DBConnection.closeConnection();
+        DBConnection.closeConnection(connection);
     }
     
 }
