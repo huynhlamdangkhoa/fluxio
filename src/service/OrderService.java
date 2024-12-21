@@ -1,54 +1,58 @@
-package dao;
-
-import model.Order;
-import java.util.Date;
-import java.util.List;
-
-public interface OrderDAO extends GenericDAO<Order, Long>{
-    List<Order> findByDateRange(Date start, Date end);
-    List<Order> findByStatus(String status);
-}
 package service;
-import dao.OrderDAO;
+
+import DAO.OrderDAO;
 import model.Order;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
-public class OrderService{
+public class OrderService {
     private final OrderDAO orderDAO;
-    public OrderService(OrderDAO orderDAO){
+
+    public OrderService(OrderDAO orderDAO) {
         this.orderDAO = orderDAO;
     }
-    public boolean addOrder(Order order){
+
+    public boolean addOrder(Order order) {
         if (isValidOrder(order)) {
             orderDAO.insert(order);
             return true;
         }
         return false;
     }
-    public boolean updateOrder(Order order){
-        if(order != null && order.getId() != null){
+
+    public boolean updateOrder(Order order) {
+        if (order != null && order.getOrderId() > 0) {
             orderDAO.update(order);
             return true;
         }
         return false;
     }
-    public boolean deleteOrder(Long id){
-        return orderDAO.delete(id) > 0;
+
+    public boolean deleteOrder(int orderId) {
+        return orderDAO.delete(orderId) > 0;
     }
-    public List<Order> getAllOrders(){
+
+    public List<Order> getAllOrders() {
         return orderDAO.findAll();
     }
-    public Order getOrderById(Long id){
-        return orderDAO.findById(id);
+
+    public Order getOrderById(int orderId) {
+        return orderDAO.findById(orderId);
     }
-    public List<Order> getOrdersByDateRange(Date start, Date end){
+
+    public List<Order> getOrdersByDateRange(LocalDateTime start, LocalDateTime end) {
         return orderDAO.findByDateRange(start, end);
     }
-    public List<Order> getOrdersByStatus(String status){
+
+    public List<Order> getOrdersByStatus(String status) {
         return orderDAO.findByStatus(status);
     }
-    private boolean isValidOrder(Order order){
-        return order != null && order.getCustomerId() != null && !order.getItems().isEmpty();
+
+    private boolean isValidOrder(Order order) {
+        return order != null
+                && order.getTotalAmount() > 0
+                && order.getOrderDate() != null
+                && order.getShippingAddress() != null && !order.getShippingAddress().isEmpty()
+                && order.getPaymentMethod() != null && !order.getPaymentMethod().isEmpty();
     }
 }
