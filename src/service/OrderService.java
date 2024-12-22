@@ -3,49 +3,46 @@ package service;
 import DAO.OrderDAO;
 import model.Order;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
 
 public class OrderService {
     private final OrderDAO orderDAO;
 
-    public OrderService(OrderDAO orderDAO) {
-        this.orderDAO = orderDAO;
+    public OrderService() {
+        this.orderDAO = OrderDAO.getInstance();
     }
 
     public boolean addOrder(Order order) {
         if (isValidOrder(order)) {
-            orderDAO.insert(order);
-            return true;
+            return orderDAO.insert(order) > 0;
         }
         return false;
     }
 
     public boolean updateOrder(Order order) {
         if (order != null && order.getOrderId() > 0) {
-            orderDAO.update(order);
-            return true;
+            return orderDAO.update(order) > 0;
         }
         return false;
     }
 
-    public boolean deleteOrder(int orderId) {
-        return orderDAO.delete(orderId) > 0;
+    public boolean deleteOrder(Order order) {
+        if (order != null && order.getOrderId() > 0) {
+            return orderDAO.delete(order) > 0;
+        }
+        return false;
     }
 
-    public List<Order> getAllOrders() {
-        return orderDAO.findAll();
+    public ArrayList<Order> getAllOrders() {
+        return orderDAO.selectAll();
     }
 
     public Order getOrderById(int orderId) {
-        return orderDAO.findById(orderId);
-    }
-
-    public List<Order> getOrdersByDateRange(LocalDateTime start, LocalDateTime end) {
-        return orderDAO.findByDateRange(start, end);
-    }
-
-    public List<Order> getOrdersByStatus(String status) {
-        return orderDAO.findByStatus(status);
+        if (orderId > 0) {
+            Order order = new Order(orderId, 0.0, null, null, null, null); // Assuming other fields can be null or default
+            return orderDAO.selectById(order);
+        }
+        return null; 
     }
 
     private boolean isValidOrder(Order order) {

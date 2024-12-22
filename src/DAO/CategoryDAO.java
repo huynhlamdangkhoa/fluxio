@@ -1,81 +1,91 @@
 package DAO;
 
-import model.Category;
+import util.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Category;
 
-public class CategoryDAO {
-    private final Connection connection;
-
-    public CategoryDAO(Connection connection) {
-        this.connection = connection;
+public class CategoryDAO implements DAOInterface<Category> {
+    public static CategoryDAO getInstance() {
+        return new CategoryDAO();
     }
 
-    public void insert(Category category) {
+    @Override
+    public int insert(Category category) {
         String sql = "INSERT INTO categories (category_id, category_name) VALUES (?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, category.getCategoryId());
-            stmt.setString(2, category.getCategoryName());
-            stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, category.getCategoryId());
+            statement.setString(2, category.getCategoryName());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting category", e);
         }
+        return 0;
     }
 
-    public void update(Category category) {
+    @Override
+    public int update(Category category) {
         String sql = "UPDATE categories SET category_name = ? WHERE category_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, category.getCategoryName());
-            stmt.setInt(2, category.getCategoryId());
-            stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, category.getCategoryName());
+            statement.setInt(2, category.getCategoryId());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating category", e);
         }
+        return 0;
     }
 
-    public int delete(int categoryId) {
+    @Override
+    public int delete(Category category) {
         String sql = "DELETE FROM categories WHERE category_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, categoryId);
-            return stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, category.getCategoryId());
+            return statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting category", e);
+            e.printStackTrace();
         }
+        return 0;
     }
 
-    public List<Category> findAll() {
+    @Override
+    public ArrayList<Category> selectAll() {
+        List<Category> category = new ArrayList<>();
         String sql = "SELECT * FROM categories";
-        List<Category> categories = new ArrayList<>();
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                categories.add(mapResultSetToCategory(rs));
+        try (Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement(); 
+            ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("category_id");
+                String categoryName = resultSet.getString("categoryName");
+                category.add(new Category(id, categoryName));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all categories", e);
         }
-        return categories;
+        return null;
     }
 
-    public Category findById(int categoryId) {
+    @Override
+    public Category selectById(Category category) {
         String sql = "SELECT * FROM categories WHERE category_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, categoryId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToCategory(rs);
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, category.getCategoryId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                int id = resultSet.getInt("category_id");
+                String categoryName = resultSet.getString("categoryName");
+                return new Category(id, categoryName);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving category by ID", e);
         }
         return null;
-    }
-
-    private Category mapResultSetToCategory(ResultSet rs) throws SQLException {
-        return new Category(
-            rs.getInt("category_id"),
-            rs.getString("category_name")
-        );
     }
 }

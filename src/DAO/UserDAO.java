@@ -69,7 +69,50 @@ public class UserDAO implements DAOInterface<User> {
         try (Connection connection = DBConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("user_id");
+                String username = resultSet.getString("username");
+                String password = resultSet.getString("password");
+                String email = resultSet.getString("email");
+                String role = resultSet.getString("role");
+                user.add(new User(id, username, password, email, role));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return (ArrayList<User>) user;
+    }
 
+    @Override
+    public User selectById(User user) {
+        String sql = "SELECT * FROM User WHERE user_id=?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, user.getUserId()); 
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("user_id");
+                    String username = resultSet.getString("username");
+                    String password = resultSet.getString("password");
+                    String email = resultSet.getString("email");
+                    String role = resultSet.getString("role");
+                    return new User(id, username, password, email, role);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; 
+    }
+
+    public ArrayList<User> selectByCondition(String condition) {
+                String sql = "SELECT * FROM Users WHERE " + condition; // Note: Be cautious of SQL injection risks.
+        ArrayList<User> user = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 int id = resultSet.getInt("user_id");
                 String username = resultSet.getString("username");
@@ -82,36 +125,6 @@ public class UserDAO implements DAOInterface<User> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
-    }
-
-    @Override
-    public User selectById(User user) {
-        String sql = "SELECT * FROM User WHERE user_id=?";
-        try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-            statement.setInt(1, user.getUserId()); 
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    int id = resultSet.getInt("user_id");
-                    String username = resultSet.getString("username");
-                    String password = resultSet.getString("password");
-                    String email = resultSet.getString("email");
-                    String role = resultSet.getString("role");
-
-                    return new User(id, username, password, email, role);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null; 
-    }
-
-    @Override
-    public ArrayList<User> selectByCondition(String condition) {
-        return null;
+        return (ArrayList<User>) user;
     }
 }
