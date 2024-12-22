@@ -3,13 +3,13 @@ package model;
 import java.util.List;
 
 public class Product {
-    private List<Integer> productId;
+    private int productId;
     private String productName;
     private int quantity;
     private Double price;
     private String category;
     
-    public Product(String productName, int quantity, Double price, String category, List<Integer> productId){
+    public Product(int productId, String productName, int quantity, Double price, String category){
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
@@ -17,7 +17,7 @@ public class Product {
         this.category = category;
     }
     
-    public List<Integer> getProductId() {
+    public int getProductId() {
         return productId;
     }
 

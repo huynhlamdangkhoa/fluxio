@@ -4,71 +4,93 @@ import model.Product;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import util.DBConnection;
 
-public class ProductDAO {
-    private final Connection connection;
-
-    public ProductDAO(Connection connection) {
-        this.connection = connection;
+public class ProductDAO implements DAOInterface<Product> {
+    public static ProductDAO getInstance() {
+        return new ProductDAO();
     }
 
-    public void insert(Product product) {
+    @Override
+    public int insert(Product product) {
         String sql = "INSERT INTO products (product_name, quantity, price, category) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, product.getProductName());
-            stmt.setInt(2, product.getQuantity());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setString(4, product.getCategory());
-            stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getProductName());
+            statement.setInt(2, product.getQuantity());
+            statement.setDouble(3, product.getPrice());
+            statement.setString(4, product.getCategory());
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting product", e);
         }
+        return 0;
     }
 
-    public void update(Product product) {
+    @Override
+    public int update(Product product) {
         String sql = "UPDATE products SET product_name = ?, quantity = ?, price = ?, category = ? WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, product.getProductName());
-            stmt.setInt(2, product.getQuantity());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setString(4, product.getCategory());
-            stmt.setInt(5, product.getProductId().get(0)); // Assuming single product ID for update
-            stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getProductName());
+            statement.setInt(2, product.getQuantity());
+            statement.setDouble(3, product.getPrice());
+            statement.setString(4, product.getCategory());
+            statement.setInt(5, product.getProductId()); 
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating product", e);
         }
+        return 0;
     }
 
-    public int delete(int id) {
+    @Override
+    public int delete(Product product) {
         String sql = "DELETE FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, product.getProductId());
+            return statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Error deleting product", e);
-        }
+            e.printStackTrace();        }
+        return 0;
     }
 
-    public List<Product> findAll() {
+    @Override
+    public ArrayList<Product> selectAll() {
         String sql = "SELECT * FROM products";
         List<Product> products = new ArrayList<>();
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement(); 
+            ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("product_id");
+                String productName = resultSet.getString("product_name");
+                int quantity = resultSet.getInt("quantity");
+                double price = resultSet.getDouble("price");
+                String category = resultSet.getString("category");
+                products.add(new Product(id, productName, quantity, price, category));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all products", e);
         }
-        return products;
+        return (ArrayList<Product>) products;
     }
 
-    public Product findById(int id) {
+    @Override
+    public Product selectById(Product product) {
         String sql = "SELECT * FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToProduct(rs);
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, product.getProductId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                String productName = resultSet.getString("product_name");
+                int quantity = resultSet.getInt("quantity");
+                double price = resultSet.getDouble("price");
+                String category = resultSet.getString("category");
+                return new Product(id, productName, quantity, price, category);
                 }
             }
         } catch (SQLException e) {
@@ -77,61 +99,47 @@ public class ProductDAO {
         return null;
     }
 
-    public List<Product> findByCategory(String category) {
+    public ArrayList<Product> selectByCategory(String category) {
         String sql = "SELECT * FROM products WHERE category = ?";
         List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, category);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, category);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    String productName = resultSet.getString("product_name");
+                    int quantity = resultSet.getInt("quantity");
+                    double price = resultSet.getDouble("price");
+                    category = resultSet.getString("category");
+                    products.add(new Product(id, productName, quantity, price, category));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving products by category", e);
         }
-        return products;
+        return (ArrayList<Product>) products;
     }
 
-    public List<Product> searchByName(String name) {
+    public ArrayList<Product> searchByName(String productName) {
         String sql = "SELECT * FROM products WHERE product_name LIKE ?";
         List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, "%" + name + "%");
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + productName + "%");
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    productName = resultSet.getString("product_name");
+                    int quantity = resultSet.getInt("quantity");
+                    double price = resultSet.getDouble("price");
+                    String category = resultSet.getString("category");
+                    products.add(new Product(id, productName, quantity, price, category));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error searching products by name", e);
         }
-        return products;
-    }
-
-    public List<Product> findLowStockItems(int threshold) {
-        String sql = "SELECT * FROM products WHERE quantity < ?";
-        List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, threshold);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving low stock products", e);
-        }
-        return products;
-    }
-
-    private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
-        return new Product(
-                rs.getString("product_name"),
-                rs.getInt("quantity"),
-                rs.getDouble("price"),
-                rs.getString("category"),
-                List.of(rs.getInt("product_id")) // Wrapping product_id into a List
-        );
+        return (ArrayList<Product>) products;
     }
 }

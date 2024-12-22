@@ -20,27 +20,28 @@ public class ProductService {
     }
 
     public boolean updateProduct(Product product) {
-        if (product != null && product.getProductId() != null && !product.getProductId().isEmpty()) {
+        if (product != null && product.getProductId() > 0) {
             productDAO.update(product);
             return true;
         }
         return false;
     }
 
-    public boolean deleteProduct(int productId) {  // Changed to accept a single int as productId
-        return productDAO.delete(productId) > 0;
+    public boolean deleteProduct(Product product) {
+        return productDAO.delete(product) > 0;
     }
 
     public List<Product> getAllProducts() {
-        return productDAO.findAll();
+        return productDAO.selectAll();
     }
 
-    public Product getProductById(int productId) {  // Changed to accept a single int as productId
-        return productDAO.findById(productId);
+    public Product getProductById(int productId) {
+        return productDAO.selectById(new Product(productId, null, 0, 0.0, null));
+
     }
 
-    public List<Product> getProductsByCategory(String category) {  // Changed to accept String category
-        return productDAO.findByCategory(category);
+    public List<Product> getProductsByCategory(String category) {
+        return productDAO.selectByCategory(category);
     }
 
     public List<Product> searchProductsByName(String name) {
@@ -48,7 +49,7 @@ public class ProductService {
     }
 
     public List<Product> getLowStockProducts(int threshold) {
-        return productDAO.findLowStockItems(threshold);
+        return null;
     }
 
     private boolean isValidProduct(Product product) {
@@ -56,6 +57,6 @@ public class ProductService {
             && product.getProductName() != null && !product.getProductName().isEmpty()
             && product.getPrice() != null && product.getPrice() >= 0
             && product.getQuantity() >= 0
-            && product.getCategory() != null && !product.getCategory().isEmpty();  // Ensure valid category
+            && product.getCategory() != null && !product.getCategory().isEmpty();
     }
 }
