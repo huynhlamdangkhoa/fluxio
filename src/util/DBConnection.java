@@ -17,29 +17,22 @@ public class DBConnection {
     private static Connection connection = null;
 
     public static Connection getConnection() {
-        if (connection == null) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Database connection established successfully!");
-            } catch (ClassNotFoundException e) {
-                System.err.println("MySQL driver not found: " + e.getMessage());
-            } catch (SQLException e) {
-                System.err.println("Error connecting to the database: " + e.getMessage());
-            }
-        }
-        return connection;
-    }
-    
-        public static void closeConnection(Connection c) {
         try {
-            if (c != null && !c.isClosed()) {
-                c.close();
-                System.out.println("Database connection closed.");
+            if (connection == null || connection.isClosed()) { // Check if the connection is null or closed
+                try {
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+                    connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                    System.out.println("Database connection established successfully!");
+                } catch (ClassNotFoundException e) {
+                    System.err.println("MySQL driver not found: " + e.getMessage());
+                } catch (SQLException e) {
+                    System.err.println("Error connecting to the database: " + e.getMessage());
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Error checking the connection status: " + e.getMessage());
         }
+        return connection;
     }
 
     public static void runSQLScript(String filePath) {
@@ -62,12 +55,22 @@ public class DBConnection {
     }
     
         public static void printInfo(Connection c) {
-        if(c!=null) {
+            if(c!=null) {
+                try {
+                    System.out.println((c.getMetaData().toString()));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+    }
+        public static void closeConnection(Connection c) {
             try {
-                System.out.println((c.getMetaData().toString()));
+                if (c != null && !c.isClosed()) {
+                    c.close();
+                    System.out.println("Database connection closed.");
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
     }
 }

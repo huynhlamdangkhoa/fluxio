@@ -1,74 +1,130 @@
 package DAO;
 
 import model.Product;
+import model.Category;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import util.DBConnection;
 
-public class ProductDAO {
-    private final Connection connection;
+public class ProductDAO implements DAOInterface<Product> {
+    private static final HashSet<Integer> usedProductIds = new HashSet<>();
 
-    public ProductDAO(Connection connection) {
-        this.connection = connection;
+    public static ProductDAO getInstance() {
+        return new ProductDAO();
     }
 
-    public void insert(Product product) {
-        String sql = "INSERT INTO products (product_name, quantity, price, category) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, product.getProductName());
-            stmt.setInt(2, product.getQuantity());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setString(4, product.getCategory());
-            stmt.executeUpdate();
+    public int generateProductId() {
+        Random random = new Random();
+        int productId;
+        do {
+            productId = 100000 + random.nextInt(900000); // Generates a number between 100 and 999
+        } while (usedProductIds.contains(productId));
+        usedProductIds.add(productId);
+        return productId;
+    }
+    
+    private boolean idExistsInDatabase(int productId) {
+        String sql = "SELECT 1 FROM Category WHERE category_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking category ID existence", e);
+        }
+    }
+
+    @Override
+    public int insert(Product product) {
+        String sql = "INSERT IGNORE INTO Product (product_id, product_name, category_id, price, stock_quantity, description) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            int productId = generateProductId();
+            product.setProductId(productId);
+            statement.setInt(1, productId);
+            statement.setString(2, product.getProductName());
+            statement.setInt(3, product.getCategoryId());
+            statement.setDouble(4, product.getPrice());
+            statement.setInt(5, product.getQuantity());
+            statement.setString(6, product.getDescription());
+            return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting product", e);
         }
     }
 
-    public void update(Product product) {
-        String sql = "UPDATE products SET product_name = ?, quantity = ?, price = ?, category = ? WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, product.getProductName());
-            stmt.setInt(2, product.getQuantity());
-            stmt.setDouble(3, product.getPrice());
-            stmt.setString(4, product.getCategory());
-            stmt.setInt(5, product.getProductId().get(0)); // Assuming single product ID for update
-            stmt.executeUpdate();
+    @Override
+    public int update(Product product) {
+        String sql = "UPDATE Product SET product_name = ?, category_id = ?, price = ?, stock_quantity = ?, description = ? WHERE product_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, product.getProductName());
+            statement.setInt(2, product.getCategoryId());
+            statement.setDouble(3, product.getPrice());
+            statement.setInt(4, product.getQuantity());
+            statement.setString(5, product.getDescription());
+            statement.setInt(6, product.getProductId());
+            return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error updating product", e);
         }
     }
 
-    public int delete(int id) {
-        String sql = "DELETE FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate();
+    @Override
+    public int delete(Product product) {
+        String sql = "DELETE FROM Product WHERE product_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, product.getProductId());
+            return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting product", e);
         }
     }
 
-    public List<Product> findAll() {
-        String sql = "SELECT * FROM products";
+    @Override
+    public ArrayList<Product> selectAll() {
+        String sql = "SELECT * FROM Product";
         List<Product> products = new ArrayList<>();
-        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement(); 
+            ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("product_id");
+                String productName = resultSet.getString("product_name");
+                int categoryId = resultSet.getInt("category_id");
+                double price = resultSet.getDouble("price");
+                int quantity = resultSet.getInt("stock_quantity");
+                String description = resultSet.getString("description");
+                products.add(new Product(id, productName, categoryId, price, quantity, description));
+                usedProductIds.add(id); // Populate used IDs to prevent duplicates
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all products", e);
         }
-        return products;
+        return (ArrayList<Product>) products;
     }
 
-    public Product findById(int id) {
-        String sql = "SELECT * FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToProduct(rs);
+    @Override
+    public Product selectById(Product product) {
+        String sql = "SELECT * FROM Product WHERE product_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, product.getProductId());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    String productName = resultSet.getString("product_name");
+                    int categoryId = resultSet.getInt("category_id");
+                    double price = resultSet.getDouble("price");
+                    int quantity = resultSet.getInt("stock_quantity");
+                    String description = resultSet.getString("description");
+                    return new Product(id, productName, categoryId, price, quantity, description);
                 }
             }
         } catch (SQLException e) {
@@ -77,61 +133,49 @@ public class ProductDAO {
         return null;
     }
 
-    public List<Product> findByCategory(String category) {
-        String sql = "SELECT * FROM products WHERE category = ?";
+    public ArrayList<Product> selectByCategory(String categoryName) {
+        String sql = "SELECT * FROM Product WHERE category_id = (SELECT category_id FROM Category WHERE category_name = ?)";
         List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, category);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, categoryName);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    String productName = resultSet.getString("product_name");
+                    int categoryId = resultSet.getInt("category_id");
+                    double price = resultSet.getDouble("price");
+                    int quantity = resultSet.getInt("stock_quantity");
+                    String description = resultSet.getString("description");
+                    products.add(new Product(id, productName, categoryId, price, quantity, description));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving products by category", e);
         }
-        return products;
+        return (ArrayList<Product>) products;
     }
 
-    public List<Product> searchByName(String name) {
-        String sql = "SELECT * FROM products WHERE product_name LIKE ?";
+    public ArrayList<Product> searchByName(String productName) {
+        String sql = "SELECT * FROM Product WHERE product_name LIKE ?";
         List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, "%" + name + "%");
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
+        try (Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + productName + "%");
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("product_id");
+                    productName = resultSet.getString("product_name");
+                    int categoryId = resultSet.getInt("category_id");
+                    double price = resultSet.getDouble("price");
+                    int quantity = resultSet.getInt("stock_quantity");
+                    String description = resultSet.getString("description");
+                    products.add(new Product(id, productName, categoryId, price, quantity, description));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error searching products by name", e);
         }
-        return products;
-    }
-
-    public List<Product> findLowStockItems(int threshold) {
-        String sql = "SELECT * FROM products WHERE quantity < ?";
-        List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, threshold);
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    products.add(mapResultSetToProduct(rs));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving low stock products", e);
-        }
-        return products;
-    }
-
-    private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
-        return new Product(
-                rs.getString("product_name"),
-                rs.getInt("quantity"),
-                rs.getDouble("price"),
-                rs.getString("category"),
-                List.of(rs.getInt("product_id")) // Wrapping product_id into a List
-        );
+        return (ArrayList<Product>) products;
     }
 }
