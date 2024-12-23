@@ -1,5 +1,7 @@
 package GUI;
 
+import model.User;
+
 public class SignUpScreen extends javax.swing.JFrame {
 
     public SignUpScreen() {
@@ -7,7 +9,7 @@ public class SignUpScreen extends javax.swing.JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -235,26 +237,59 @@ public class SignUpScreen extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 170, -1, -1));
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }// </editor-fold>                        
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }                                           
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        String username = jTextField1.getText(); 
+        String email = jTextField2.getText();    
+        String password = jTextField3.getText(); 
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            javax.swing.JLabel errorField = new javax.swing.JLabel("Please fill in all fields!");
+            errorField.setForeground(java.awt.Color.RED);
+            javax.swing.JOptionPane.showMessageDialog(this, errorField, "Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int id = (int)(Math.random() * 90000) + 10000;
+
+        User user = new User(id, username, password, email); 
+
+        try (java.sql.Connection conn = util.DBConnection.getConnection()) {
+            String sql = "INSERT INTO User (user_id, username, password, email) VALUES (?, ?, ?, ?)";
+            try (java.sql.PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setInt(1, user.getUserId());
+                statement.setString(2, user.getUsername());
+                statement.setString(3, user.getPassword()); 
+                statement.setString(4, user.getEmail());
+                statement.executeUpdate();
+
+
+                javax.swing.JLabel successLabel = new javax.swing.JLabel("Sign up successful!");
+                successLabel.setForeground(java.awt.Color.GREEN);
+                javax.swing.JOptionPane.showMessageDialog(this, successLabel, "Success!", javax.swing.JOptionPane.PLAIN_MESSAGE);
+
+                LoginScreen loginScreen = new LoginScreen(); 
+                loginScreen.setVisible(true); 
+                this.dispose(); 
+            }
+        } catch (java.sql.SQLException ex) {
+            javax.swing.JLabel errorDatabase = new javax.swing.JLabel("Database error: " + ex.getMessage());
+            errorDatabase.setForeground(java.awt.Color.RED);
+            javax.swing.JOptionPane.showMessageDialog(this, errorDatabase, "Database Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }  
+    } 
+          
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         LoginScreen loginScreen = new LoginScreen();
         loginScreen.setVisible(true);
-        this.dispose();     }//GEN-LAST:event_jButton2ActionPerformed
+        this.dispose();     }                                        
 
-    /**
-     * @param args the command line arguments
-     */
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -273,5 +308,4 @@ public class SignUpScreen extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    // End of variables declaration//GEN-END:variables
 }

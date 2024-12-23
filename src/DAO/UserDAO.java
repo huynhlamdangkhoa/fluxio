@@ -20,7 +20,6 @@ public class UserDAO implements DAOInterface<User> {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
-            statement.setString(4, user.getRole());
 
             return statement.executeUpdate(); 
         } catch (SQLException e) {
@@ -38,7 +37,6 @@ public class UserDAO implements DAOInterface<User> {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
-            statement.setString(4, user.getRole());
             statement.setInt(5, user.getUserId());
 
             return statement.executeUpdate(); 
@@ -74,8 +72,7 @@ public class UserDAO implements DAOInterface<User> {
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                String role = resultSet.getString("role");
-                user.add(new User(id, username, password, email, role));
+                user.add(new User(id, username, password, email));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -97,8 +94,7 @@ public class UserDAO implements DAOInterface<User> {
                     String username = resultSet.getString("username");
                     String password = resultSet.getString("password");
                     String email = resultSet.getString("email");
-                    String role = resultSet.getString("role");
-                    return new User(id, username, password, email, role);
+                    return new User(id, username, password, email);
                 }
             }
         } catch (SQLException e) {
@@ -120,7 +116,7 @@ public class UserDAO implements DAOInterface<User> {
                 String email = resultSet.getString("email");
                 String role = resultSet.getString("role");
 
-                user.add(new User(id, username, password, email, role));
+                user.add(new User(id, username, password, email));
             }
         } catch (SQLException e) {
             e.printStackTrace();

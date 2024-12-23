@@ -26,7 +26,7 @@ public class UserService {
     }
 
     public boolean deleteUser(int userId) {
-        User user = new User(userId, null, null, null, null);
+        User user = new User(userId, null, null, null);
         return userDAO.delete(user) > 0;
     }
 
@@ -35,7 +35,7 @@ public class UserService {
     }
 
     public User getUserById(int userId) {
-        User user = new User(userId, null, null, null, null);
+        User user = new User(userId, null, null, null);
         return userDAO.selectById(user);
     }
 
@@ -44,7 +44,6 @@ public class UserService {
         if (user.getUsername() == null || user.getUsername().isEmpty()) return false;
         if (user.getPassword() == null || user.getPassword().isEmpty()) return false;
         if (user.getEmail() == null || !user.getEmail().contains("@")) return false;
-        if (user.getRole() == null || user.getRole().isEmpty()) return false;
         return true;
     }
 }

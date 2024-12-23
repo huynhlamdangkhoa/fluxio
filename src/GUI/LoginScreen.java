@@ -198,8 +198,42 @@ public class LoginScreen extends javax.swing.JFrame {
     }                                               
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }  
+    String email = jTextField1.getText();
+    String password = new String(jPasswordField1.getPassword()); 
+
+    if (email.isEmpty() || password.isEmpty()) {
+        javax.swing.JLabel errorField = new javax.swing.JLabel("Both fields are required!!!");
+        errorField.setForeground(java.awt.Color.RED);
+        javax.swing.JOptionPane.showMessageDialog(this, errorField, "Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try (java.sql.Connection connection = util.DBConnection.getConnection()) {
+        String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+        try (java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, email);
+            statement.setString(2, password); 
+
+            try (java.sql.ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    HomePage homePage = new HomePage();
+                    homePage.setVisible(true);
+                    this.dispose(); 
+                } else {
+                    javax.swing.JLabel errorLabel = new javax.swing.JLabel("Incorrect email or password. Please try again!");
+                    errorLabel.setForeground(java.awt.Color.RED);
+                    javax.swing.JOptionPane.showMessageDialog(this, errorLabel, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    } catch (java.sql.SQLException ex) {
+        javax.swing.JLabel errorDatabase = new javax.swing.JLabel("Database error: " + ex.getMessage());
+        errorDatabase.setForeground(java.awt.Color.RED);
+        javax.swing.JOptionPane.showMessageDialog(this, errorDatabase, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }    
+} 
+
+
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         SignUpScreen signUpScreen = new SignUpScreen();
