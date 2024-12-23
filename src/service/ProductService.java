@@ -13,7 +13,8 @@ public class ProductService {
 
     public boolean addProduct(Product product) {
         if (isValidProduct(product)) {
-            productDAO.insert(product);
+            int productId = productDAO.insert(product);
+            product.setProductId(productId); // Update product with generated ID
             return true;
         }
         return false;
@@ -21,14 +22,16 @@ public class ProductService {
 
     public boolean updateProduct(Product product) {
         if (product != null && product.getProductId() > 0) {
-            productDAO.update(product);
-            return true;
+            return productDAO.update(product) > 0;
         }
         return false;
     }
 
     public boolean deleteProduct(Product product) {
-        return productDAO.delete(product) > 0;
+        if (product != null && product.getProductId() > 0) {
+            return productDAO.delete(product) > 0;
+        }
+        return false;
     }
 
     public List<Product> getAllProducts() {
@@ -36,8 +39,8 @@ public class ProductService {
     }
 
     public Product getProductById(int productId) {
-        return productDAO.selectById(new Product(productId, null, 0, 0.0, null));
-
+        Product dummyProduct = new Product(productId, null, 0, 0.0, 0, null);
+        return productDAO.selectById(dummyProduct);
     }
 
     public List<Product> getProductsByCategory(String category) {
@@ -48,15 +51,11 @@ public class ProductService {
         return productDAO.searchByName(name);
     }
 
-    public List<Product> getLowStockProducts(int threshold) {
-        return null;
-    }
-
     private boolean isValidProduct(Product product) {
         return product != null
             && product.getProductName() != null && !product.getProductName().isEmpty()
             && product.getPrice() != null && product.getPrice() >= 0
             && product.getQuantity() >= 0
-            && product.getCategory() != null && !product.getCategory().isEmpty();
+            && product.getCategoryId() > 0; // Validates category ID existence
     }
 }

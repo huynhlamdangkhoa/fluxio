@@ -1,5 +1,6 @@
 package GUI;
 
+import DAO.UserDAO;
 import model.User;
 
 public class SignUpScreen extends javax.swing.JFrame {
@@ -254,15 +255,16 @@ public class SignUpScreen extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, errorField, "Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        int id = (int)(Math.random() * 90000) + 10000;
+        
+        UserDAO userDAO = new UserDAO();
+        int id = userDAO.generateUserId();
 
         User user = new User(id, username, password, email); 
 
         try (java.sql.Connection conn = util.DBConnection.getConnection()) {
             String sql = "INSERT INTO User (user_id, username, password, email) VALUES (?, ?, ?, ?)";
             try (java.sql.PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setInt(1, user.getUserId());
+                statement.setInt(1, id);
                 statement.setString(2, user.getUsername());
                 statement.setString(3, user.getPassword()); 
                 statement.setString(4, user.getEmail());

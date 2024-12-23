@@ -1,27 +1,31 @@
 package model;
 
 import java.util.List;
+import model.Category;
 
 public class Product {
     private int productId;
     private String productName;
     private int quantity;
     private Double price;
-    private String category;
+    private int categoryId;
+    private String description;
+    private Category category;
     
-    public Product(int productId, String productName, int quantity, Double price, String category){
+    public Product(int productId, String productName, int categoryId, double price, int quantity, String description){
         this.productId = productId;
         this.productName = productName;
-        this.quantity = quantity;
+        this.categoryId = categoryId;
         this.price = price;
-        this.category = category;
+        this.quantity = quantity;
+        this.description = description;
     }
     
     public int getProductId() {
         return productId;
     }
 
-    public void setProductId(List<Integer> productIds) {
+    public void setProductId(int productIds) {
         this.productId = productId;
     }
     
@@ -48,12 +52,20 @@ public class Product {
         this.price = price;
     }
     
-    public String getCategory() {
-        return category;
+    public int getCategoryId() {
+        return category.getCategoryId();
     }
     
-    public void setCategory(String category) {
+    public void setCategoryId(Category category) {
         this.category = category;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(List<Integer> productIds) {
+        this.description = description;
     }
 }
 

@@ -4,18 +4,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/E:/CS%20Projects/fluxio/src/GUI/SignUpScreen.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/model/Category.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/DAO/OrderDAO.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/model/User.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/DAO/DAOInterface.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/model/Order.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/DAO/UserDAO.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/fluxio/Main.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/DAO/ProductDAO.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/DAO/CategoryDAO.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/GUI/LoginScreen.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/GUI/HomePage.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/DAO/DAOInterface.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/model/Order.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/service/ProductService.java</file>
-            <file>file:/E:/CS%20Projects/fluxio/src/service/UserService.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/GUI/LoginScreen.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/model/Product.java</file>
         </group>
     </open-files>

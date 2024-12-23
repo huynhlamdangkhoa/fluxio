@@ -18,16 +18,17 @@ CREATE TABLE IF NOT EXISTS Category (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Product(int productId, String productName, int quantity, Double price, String category)
+-- Product(int productId, String productName, int quantity, Double price, int categoryID)
 CREATE TABLE IF NOT EXISTS Product (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
-    quantity INT NOT NULL,
+    category_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
-    category VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    stock_quantity INT NOT NULL,
+    description TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES Category(category_id)
 );
-
 
 -- Order(int orderId, double totalAmount, LocalDateTime orderDate, String status, String shippingAddress, String paymentMethod)
 CREATE TABLE IF NOT EXISTS `Order` (
@@ -37,22 +38,20 @@ CREATE TABLE IF NOT EXISTS `Order` (
     status ENUM('Pending', 'Completed', 'Cancelled') DEFAULT 'Pending',
     shipping_address VARCHAR(255) NOT NULL,
     payment_method VARCHAR(100) NOT NULL,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Insert some initial data into User, Category, Product, and Order
 INSERT IGNORE INTO User (username, password, email) VALUES
 ('admin', 'admin123', 'admin@example.com');
 
-INSERT IGNORE INTO Category (category_id, category_name) VALUES
-(1514, 'Electronics'),
-(1437, 'Clothing');
+INSERT IGNORE INTO Category (category_name) VALUES
+('Electronics'),
+('Clothing');
 
 INSERT IGNORE INTO Product (product_name, category_id, price, stock_quantity, description) VALUES
 ('Smartphone', 1, 699.99, 50, 'Latest model smartphone'),
 ('Jeans', 2, 49.99, 100, 'Denim jeans in various sizes');
 
-INSERT IGNORE INTO `Order` (customer_id, total_amount, status, shipping_address, payment_method) VALUES
-(1, 49.99, 'Completed', '144 Ton Duc Thang, District 2, HCMC', 'Credit Card');
-
-
-
+INSERT IGNORE INTO `Order` (total_amount, status, shipping_address, payment_method) VALUES
+(49.99, 'Completed', '144 Ton Duc Thang, District 2, HCMC', 'Credit Card');

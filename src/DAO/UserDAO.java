@@ -3,17 +3,32 @@ package DAO;
 import util.DBConnection;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import util.DBConnection;
 import model.User;
 
 public class UserDAO implements DAOInterface<User> {
+    private static final HashSet<Integer> usedUserIds = new HashSet<>();
+
     public static UserDAO getInstance() {
         return new UserDAO();
+    }
+    
+   public int generateUserId() {
+        Random random = new Random();
+        int userId;
+        do {
+            userId = 10000 + random.nextInt(90000); // Generates a number between 100 and 999
+        } while (usedUserIds.contains(userId));
+        usedUserIds.add(userId);
+        return userId;
     }
 
     @Override
     public int insert(User user) {
-        String sql = "INSERT INTO User (username, password, email, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT IGNORE INTO User (username, password, email) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -30,7 +45,7 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public int update(User user) {
-        String sql = "UPDATE User SET username=?, password=?, email=?, role=? WHERE user_id=?";
+        String sql = "UPDATE User SET username=?, password=?, email=?, WHERE user_id=?";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -114,8 +129,6 @@ public class UserDAO implements DAOInterface<User> {
                 String username = resultSet.getString("username");
                 String password = resultSet.getString("password");
                 String email = resultSet.getString("email");
-                String role = resultSet.getString("role");
-
                 user.add(new User(id, username, password, email));
             }
         } catch (SQLException e) {
