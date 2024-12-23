@@ -1,12 +1,17 @@
 package GUI;
 
-public class LoginScreen extends javax.swing.JFrame {
+import java.util.List;
+import GUI.PageGraph;
+
+public class LoginPage extends javax.swing.JFrame {
 
     /**
      * Creates new form LoginScreen
      */
-    public LoginScreen() {
+    public LoginPage() {
         initComponents();
+        PageGraph pageGraph = new PageGraph();
+
     }
 
     /**
@@ -199,7 +204,7 @@ public class LoginScreen extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
     String email = jTextField1.getText();
-    String password = new String(jPasswordField1.getPassword()); 
+    String password = new String(jPasswordField1.getPassword());
 
     if (email.isEmpty() || password.isEmpty()) {
         javax.swing.JLabel errorField = new javax.swing.JLabel("Both fields are required!!!");
@@ -212,13 +217,30 @@ public class LoginScreen extends javax.swing.JFrame {
         String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
         try (java.sql.PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, email);
-            statement.setString(2, password); 
+            statement.setString(2, password);
 
             try (java.sql.ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    HomePage homePage = new HomePage();
-                    homePage.setVisible(true);
-                    this.dispose(); 
+                    // Lấy danh sách các trang liên quan từ LoginPage
+                    PageGraph pageGraph = new PageGraph();
+                    List<String> adjacentPages = pageGraph.getAdjacentPages("LoginPage");
+
+                    // Nếu có trang liên quan, điều hướng tới trang đầu tiên trong danh sách
+                    if (!adjacentPages.isEmpty()) {
+                        String nextPage = adjacentPages.get(1);
+                        System.out.println("Next Page: " + nextPage); // Debugging line
+
+                        switch (nextPage) {
+                            case "HomePage":
+                                System.out.println("Navigating to HomePage...");
+                                HomePage homePage = new HomePage();
+                                homePage.setVisible(true);
+                                this.dispose(); // Close the current page
+                                break;
+                            // Handle other cases if needed
+                        }
+                    }
+
                 } else {
                     javax.swing.JLabel errorLabel = new javax.swing.JLabel("Incorrect email or password. Please try again!");
                     errorLabel.setForeground(java.awt.Color.RED);
@@ -230,14 +252,15 @@ public class LoginScreen extends javax.swing.JFrame {
         javax.swing.JLabel errorDatabase = new javax.swing.JLabel("Database error: " + ex.getMessage());
         errorDatabase.setForeground(java.awt.Color.RED);
         javax.swing.JOptionPane.showMessageDialog(this, errorDatabase, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }    
-} 
+    }
+}
+
 
 
     
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        SignUpScreen signUpScreen = new SignUpScreen();
-        signUpScreen.setVisible(true);
+        SignUpPage signUpPage = new SignUpPage();
+        signUpPage.setVisible(true);
         this.dispose(); 
     }       
 

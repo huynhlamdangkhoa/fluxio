@@ -1,15 +1,15 @@
 package fluxio;
 
-import GUI.SignUpScreen;
+import GUI.SignUpPage;
 import util.DBConnection;
 import java.sql.Connection;
 
 public class Main {
     public static void main(String[] args) {
-        SignUpScreen signUpFrame = new SignUpScreen();
-        signUpFrame.setVisible(true);
-        signUpFrame.pack();
-        signUpFrame.setLocationRelativeTo(null);
+        SignUpPage signUpPage = new SignUpPage();
+        signUpPage.setVisible(true);
+        signUpPage.pack();
+        signUpPage.setLocationRelativeTo(null);
 
         Connection connection = DBConnection.getConnection();
         DBConnection.printInfo(connection);

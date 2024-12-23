@@ -1,11 +1,12 @@
 package GUI;
 
 import DAO.UserDAO;
+import java.util.List;
 import model.User;
 
-public class SignUpScreen extends javax.swing.JFrame {
+public class SignUpPage extends javax.swing.JFrame {
 
-    public SignUpScreen() {
+    public SignUpPage() {
         initComponents();
     }
 
@@ -244,51 +245,64 @@ public class SignUpScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                           
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        String username = jTextField1.getText(); 
-        String email = jTextField2.getText();    
-        String password = jTextField3.getText(); 
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+    String username = jTextField1.getText(); 
+    String email = jTextField2.getText();    
+    String password = jTextField3.getText(); 
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            javax.swing.JLabel errorField = new javax.swing.JLabel("Please fill in all fields!");
-            errorField.setForeground(java.awt.Color.RED);
-            javax.swing.JOptionPane.showMessageDialog(this, errorField, "Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        UserDAO userDAO = new UserDAO();
-        int id = userDAO.generateUserId();
+    if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        javax.swing.JLabel errorField = new javax.swing.JLabel("Please fill in all fields!");
+        errorField.setForeground(java.awt.Color.RED);
+        javax.swing.JOptionPane.showMessageDialog(this, errorField, "Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-        User user = new User(id, username, password, email); 
+    UserDAO userDAO = new UserDAO();
+    int id = userDAO.generateUserId();
 
-        try (java.sql.Connection conn = util.DBConnection.getConnection()) {
-            String sql = "INSERT INTO User (user_id, username, password, email) VALUES (?, ?, ?, ?)";
-            try (java.sql.PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.setInt(1, id);
-                statement.setString(2, user.getUsername());
-                statement.setString(3, user.getPassword()); 
-                statement.setString(4, user.getEmail());
-                statement.executeUpdate();
+    User user = new User(id, username, password, email); 
 
+    try (java.sql.Connection conn = util.DBConnection.getConnection()) {
+        String sql = "INSERT INTO User (user_id, username, password, email) VALUES (?, ?, ?, ?)";
+        try (java.sql.PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.setString(2, user.getUsername());
+            statement.setString(3, user.getPassword()); 
+            statement.setString(4, user.getEmail());
+            statement.executeUpdate();
 
-                javax.swing.JLabel successLabel = new javax.swing.JLabel("Sign up successful!");
-                successLabel.setForeground(java.awt.Color.GREEN);
-                javax.swing.JOptionPane.showMessageDialog(this, successLabel, "Success!", javax.swing.JOptionPane.PLAIN_MESSAGE);
+            javax.swing.JLabel successLabel = new javax.swing.JLabel("Sign up successful!");
+            successLabel.setForeground(java.awt.Color.GREEN);
+            javax.swing.JOptionPane.showMessageDialog(this, successLabel, "Success!", javax.swing.JOptionPane.PLAIN_MESSAGE);
 
-                LoginScreen loginScreen = new LoginScreen(); 
-                loginScreen.setVisible(true); 
-                this.dispose(); 
+            // Tạo đối tượng PageGraph và tìm trang kế tiếp
+            PageGraph pageGraph = new PageGraph();
+            List<String> adjacentPages = pageGraph.getAdjacentPages("SignUpPage");
+            
+            // Giả sử chúng ta chỉ muốn chuyển đến trang đầu tiên trong danh sách
+            if (!adjacentPages.isEmpty()) {
+                String nextPage = adjacentPages.get(0); // Ví dụ: chuyển đến LoginPage
+
+                // Kiểm tra nếu trang kế tiếp là LoginPage, sau đó mở nó
+                if (nextPage.equals("LoginPage")) {
+                    LoginPage loginPage = new LoginPage();
+                    loginPage.setVisible(true);
+                    this.dispose();
+                }
             }
-        } catch (java.sql.SQLException ex) {
-            javax.swing.JLabel errorDatabase = new javax.swing.JLabel("Database error: " + ex.getMessage());
-            errorDatabase.setForeground(java.awt.Color.RED);
-            javax.swing.JOptionPane.showMessageDialog(this, errorDatabase, "Database Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }  
-    } 
+        }
+    } catch (java.sql.SQLException ex) {
+        javax.swing.JLabel errorDatabase = new javax.swing.JLabel("Database error: " + ex.getMessage());
+        errorDatabase.setForeground(java.awt.Color.RED);
+        javax.swing.JOptionPane.showMessageDialog(this, errorDatabase, "Database Error!", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }  
+}
+
+
           
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        LoginScreen loginScreen = new LoginScreen();
+        LoginPage loginScreen = new LoginPage();
         loginScreen.setVisible(true);
         this.dispose();     }                                        
 
