@@ -222,24 +222,28 @@ public class LoginPage extends javax.swing.JFrame {
             try (java.sql.ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     // Lấy danh sách các trang liên quan từ LoginPage
-                    PageGraph pageGraph = new PageGraph();
-                    List<String> adjacentPages = pageGraph.getAdjacentPages("LoginPage");
+                    PageGraph pageGraph = PageGraph.getInstance();
+                List<String> adjacentPages = pageGraph.getAdjacentPages("LoginPage");
 
-                    // Nếu có trang liên quan, điều hướng tới trang đầu tiên trong danh sách
-                    if (!adjacentPages.isEmpty()) {
-                        String nextPage = adjacentPages.get(1);
-                        System.out.println("Next Page: " + nextPage); // Debugging line
+                System.out.println("Adjacent pages for LoginPage: " + adjacentPages);
 
-                        switch (nextPage) {
-                            case "HomePage":
-                                System.out.println("Navigating to HomePage...");
-                                HomePage homePage = new HomePage();
-                                homePage.setVisible(true);
-                                this.dispose(); // Close the current page
-                                break;
-                            // Handle other cases if needed
-                        }
+                boolean homePageFound = false;
+                for (String nextPage : adjacentPages) {
+                    System.out.println("Checking page: " + nextPage);  
+
+                    if (nextPage.equals("HomePage")) {  
+                        homePageFound = true;
+                        System.out.println("homePagefound! Logining...");  
+                        HomePage homePage = new HomePage();  
+                        homePage.setVisible(true);
+                        this.setVisible(false);  
+                        break; 
                     }
+                }
+
+                if (!homePageFound) {
+                    System.out.println("ProductPage not found in adjacent pages.");  
+                }  
 
                 } else {
                     javax.swing.JLabel errorLabel = new javax.swing.JLabel("Incorrect email or password. Please try again!");

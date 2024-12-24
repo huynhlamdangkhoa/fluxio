@@ -384,17 +384,27 @@ public class ProductPage extends javax.swing.JFrame {
 
     private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
-        PageGraph pageGraph = new PageGraph();
+        PageGraph pageGraph = PageGraph.getInstance();
         List<String> adjacentPages = pageGraph.getAdjacentPages("ProductPage");
-            
-        if (!adjacentPages.isEmpty()) {
-            String nextPage = adjacentPages.get(8); 
 
-            if (nextPage.equals("HomePage")) {
+        System.out.println("Adjacent pages for ProductPage: " + adjacentPages);
+
+        boolean homePageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  
+
+            if (nextPage.equals("HomePage")) { 
+                homePageFound = true;
+                System.out.println("homePageFound found! Navigating back to home...");  
                 HomePage homePage = new HomePage();
                 homePage.setVisible(true);
-                this.dispose();
+                this.setVisible(false);  
+                break;  //
             }
+        }
+
+        if (!homePageFound) {
+            System.out.println("HomePage not found in adjacent pages.");  // Debug if UserPage was not found
         }    }//GEN-LAST:event_backActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed

@@ -2,6 +2,7 @@ package fluxio;
 
 import GUI.OrderPage;
 import GUI.ProductPage;
+import GUI.HomePage;
 import GUI.SignUpPage;
 import util.DBConnection;
 import java.sql.Connection;
@@ -9,11 +10,11 @@ import javax.swing.JFrame;
 
 public class Main {
     public static void main(String[] args) {
-//        OrderPage order = new OrderPage();
-//        order.setVisible(true);
-//        order.pack();
-//        order.setLocationRelativeTo(null);
-//        order.setResizable(true);
+        HomePage home = new HomePage();
+        home.setVisible(true);
+        home.pack();
+        home.setLocationRelativeTo(null);
+        home.setResizable(true);
         
         
 //        ProductPage product = new ProductPage();
@@ -24,10 +25,10 @@ public class Main {
         
 
         
-        SignUpPage signUpPage = new SignUpPage();
-        signUpPage.setVisible(true);
-        signUpPage.pack();
-        signUpPage.setLocationRelativeTo(null);
+//        SignUpPage signUpPage = new SignUpPage();
+//        signUpPage.setVisible(true);
+//        signUpPage.pack();
+//        signUpPage.setLocationRelativeTo(null);
 
         Connection connection = DBConnection.getConnection();
         DBConnection.printInfo(connection);

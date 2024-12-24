@@ -130,82 +130,117 @@ public class HomePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
-// TODO add your handling code here:
-        PageGraph pageGraph = new PageGraph();
+        /// Use the singleton instance of PageGraph
+        PageGraph pageGraph = PageGraph.getInstance();
         List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
-            
-        if (!adjacentPages.isEmpty()) {
-            String nextPage = adjacentPages.get(2); 
 
-            if (nextPage.equals("UserPage")) {
-                UserPage userPage = new UserPage();
+        System.out.println("Adjacent pages for HomePage: " + adjacentPages);
+
+        // Navigate to UserPage if it exists in adjacent pages
+        boolean userPageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  // Debug each page being checked
+
+            if (nextPage.equals("UserPage")) {  // Check for UserPage
+                userPageFound = true;
+                System.out.println("UserPage found! Navigating...");  // Debug
+                UserPage userPage = new UserPage();  // Create an instance of UserPage
                 userPage.setVisible(true);
-                this.dispose();
+                this.setVisible(false);  // Hide the current page (HomePage)
+                break;  // Exit after navigation
             }
-        } 
+        }
+
+        if (!userPageFound) {
+            System.out.println("UserPage not found in adjacent pages.");  // Debug if UserPage was not found
+        }
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         int a = JOptionPane.showConfirmDialog(null, "Do you want to log out?", "Log out", JOptionPane.YES_NO_OPTION);
         if(a == 0) {
-            PageGraph pageGraph = new PageGraph();
-            List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
-
-            if (!adjacentPages.isEmpty()) {
-                String nextPage = adjacentPages.get(10); 
-
-                if (nextPage.equals("LoginPage")) {
-                    LoginPage loginPage = new LoginPage();
-                    loginPage.setVisible(true);
-                    this.dispose();
-                }
-            } 
-        } 
+            setVisible(false);
+            new LoginPage().setVisible(true);
+        }
+        this.setVisible(false); 
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        PageGraph pageGraph = new PageGraph();
+        PageGraph pageGraph = PageGraph.getInstance();
         List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
-            
-        if (!adjacentPages.isEmpty()) {
-            String nextPage = adjacentPages.get(3); 
 
-            if (nextPage.equals("CategoryPage")) {
+        System.out.println("Adjacent pages for HomePage: " + adjacentPages);
+
+        boolean categoryPageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  
+
+            if (nextPage.equals("CategoryPage")) { 
+                categoryPageFound = true;
+                System.out.println("CategoryPage found! Navigating...");  
                 CategoryPage categoryPage = new CategoryPage();
                 categoryPage.setVisible(true);
-                this.dispose();
+                this.setVisible(false);  
+                break;  //
             }
+        }
+
+        if (!categoryPageFound) {
+            System.out.println("UserPage not found in adjacent pages.");  // Debug if UserPage was not found
         }  
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        PageGraph pageGraph = new PageGraph();
+        PageGraph pageGraph = PageGraph.getInstance();
         List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
-            
-        if (!adjacentPages.isEmpty()) {
-            String nextPage = adjacentPages.get(4); 
 
-            if (nextPage.equals("ProductPage")) {
-                ProductPage productPage = new ProductPage();
+        System.out.println("Adjacent pages for HomePage: " + adjacentPages);
+
+        boolean productPageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  
+
+            if (nextPage.equals("ProductPage")) {  
+                productPageFound = true;
+                System.out.println("ProductPage found! Navigating...");  
+                ProductPage productPage = new ProductPage();  
                 productPage.setVisible(true);
-                this.dispose();
+                this.setVisible(false);  
+                break; 
             }
+        }
+
+        if (!productPageFound) {
+            System.out.println("ProductPage not found in adjacent pages.");  
         }  
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        PageGraph pageGraph = new PageGraph();
+        /// Use the singleton instance of PageGraph
+        PageGraph pageGraph = PageGraph.getInstance();
         List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
-            
-        if (!adjacentPages.isEmpty()) {
-            String nextPage = adjacentPages.get(5); 
 
-            if (nextPage.equals("OrderPage")) {
-                OrderPage orderPage = new OrderPage();
+        // Debug: Print adjacent pages for HomePage (instead of UserPage)
+        System.out.println("Adjacent pages for HomePage: " + adjacentPages);
+
+        // Navigate to UserPage if it exists in adjacent pages
+        boolean orderPageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  // Debug each page being checked
+
+            if (nextPage.equals("OrderPage")) {  // Check for UserPage
+                orderPageFound = true;
+                System.out.println("OrderPage found! Navigating...");  // Debug
+                OrderPage orderPage = new OrderPage();  // Create an instance of UserPage
                 orderPage.setVisible(true);
-                this.dispose();
+                this.setVisible(false);  // Hide the current page (HomePage)
+                break;  // Exit after navigation
             }
-        }  
+        }
+
+        if (!orderPageFound) {
+            System.out.println("UserPage not found in adjacent pages.");  // Debug if UserPage was not found
+        } 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

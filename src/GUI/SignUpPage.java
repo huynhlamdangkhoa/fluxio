@@ -276,17 +276,27 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
             successLabel.setForeground(java.awt.Color.GREEN);
             javax.swing.JOptionPane.showMessageDialog(this, successLabel, "Success!", javax.swing.JOptionPane.PLAIN_MESSAGE);
 
-            PageGraph pageGraph = new PageGraph();
+            PageGraph pageGraph = PageGraph.getInstance();
             List<String> adjacentPages = pageGraph.getAdjacentPages("SignUpPage");
-            
-            if (!adjacentPages.isEmpty()) {
-                String nextPage = adjacentPages.get(0); 
 
-                if (nextPage.equals("LoginPage")) {
+            System.out.println("Adjacent pages for SignUpPage: " + adjacentPages);
+
+            boolean loginPageFound = false;
+            for (String nextPage : adjacentPages) {
+                System.out.println("Checking page: " + nextPage);  
+
+                if (nextPage.equals("LoginPage")) { 
+                    loginPageFound = true;
+                    System.out.println("loginPageFound found! Navigating back to home...");  
                     LoginPage loginPage = new LoginPage();
                     loginPage.setVisible(true);
-                    this.dispose();
+                    this.setVisible(false);  
+                    break;  //
                 }
+            }
+
+            if (!loginPageFound) {
+                System.out.println("LoginPage not found in adjacent pages.");  // Debug if UserPage was not found
             }
         }
     } catch (java.sql.SQLException ex) {
