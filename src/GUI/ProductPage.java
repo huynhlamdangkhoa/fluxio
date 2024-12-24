@@ -5,6 +5,7 @@
 package GUI;
 
 import java.sql.*;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -74,6 +75,10 @@ public class ProductPage extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnReset1 = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
+        back = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        searchProduct = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -94,8 +99,7 @@ public class ProductPage extends javax.swing.JFrame {
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 
         productTable.setBackground(new java.awt.Color(255, 255, 255));
-        productTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        productTable.setForeground(new java.awt.Color(255, 255, 255));
+        productTable.setForeground(new java.awt.Color(0, 0, 0));
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -123,50 +127,54 @@ public class ProductPage extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(productTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 80, 540, 470));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 540, 510));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, 37, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 160, 37, -1));
 
         txtName.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 98, 330, 30));
+        txtName.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 180, 330, 30));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Price");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 37, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 230, 37, -1));
 
         txtPrice.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 168, 330, 30));
+        txtPrice.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 250, 330, 30));
 
         lblQuantity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblQuantity.setForeground(new java.awt.Color(0, 0, 0));
         lblQuantity.setText("Quantity");
-        getContentPane().add(lblQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 218, -1, -1));
+        getContentPane().add(lblQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 300, -1, -1));
 
         txtQuantity.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 236, 330, 30));
+        txtQuantity.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 320, 330, 30));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Description");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 380, -1, -1));
 
         txtDescription.setBackground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 322, 330, 30));
+        txtDescription.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 410, 330, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Category");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 450, -1, -1));
 
         comboBoxCategory.setBackground(new java.awt.Color(255, 255, 255));
         comboBoxCategory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        comboBoxCategory.setForeground(new java.awt.Color(102, 102, 102));
+        comboBoxCategory.setForeground(new java.awt.Color(0, 0, 0));
         comboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(comboBoxCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 391, 330, 30));
+        getContentPane().add(comboBoxCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 480, 330, 30));
 
         btnSave.setBackground(new java.awt.Color(0, 0, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -177,7 +185,7 @@ public class ProductPage extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 440, 330, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 520, 330, -1));
 
         btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -188,7 +196,7 @@ public class ProductPage extends javax.swing.JFrame {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 530, 330, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 610, 330, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -202,7 +210,7 @@ public class ProductPage extends javax.swing.JFrame {
         jLabel1.setOpaque(true);
         jPanel1.add(jLabel1);
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 60));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 60));
 
         btnReset1.setBackground(new java.awt.Color(0, 0, 102));
         btnReset1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -213,7 +221,7 @@ public class ProductPage extends javax.swing.JFrame {
                 btnReset1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 500, 330, -1));
+        getContentPane().add(btnReset1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 580, 330, -1));
 
         btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -224,12 +232,46 @@ public class ProductPage extends javax.swing.JFrame {
                 btnUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 470, 330, -1));
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 550, 330, -1));
+
+        back.setBackground(new java.awt.Color(255, 102, 0));
+        back.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        back.setForeground(new java.awt.Color(255, 255, 255));
+        back.setText("Back to Home");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 680, -1, -1));
+
+        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextField1.setForeground(new java.awt.Color(0, 0, 0));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 470, 30));
+
+        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Search product");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        searchProduct.setBackground(new java.awt.Color(255, 102, 0));
+        searchProduct.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        searchProduct.setForeground(new java.awt.Color(255, 255, 255));
+        searchProduct.setText("   Search");
+        searchProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchProductActionPerformed(evt);
+            }
+        });
+        getContentPane().add(searchProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 100, 80, 30));
 
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
-        jPanel2.setAutoscrolls(true);
-        jPanel2.setFocusTraversalPolicyProvider(true);
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 920, 510));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 960, 670));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -340,6 +382,29 @@ public class ProductPage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("ProductPage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(8); 
+
+            if (nextPage.equals("HomePage")) {
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.dispose();
+            }
+        }    }//GEN-LAST:event_backActionPerformed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void searchProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchProductActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -405,6 +470,7 @@ public class ProductPage extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset1;
     private javax.swing.JButton btnSave;
@@ -413,13 +479,16 @@ public class ProductPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JTable productTable;
+    private javax.swing.JButton searchProduct;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPrice;

@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import util.DBConnection;
@@ -44,11 +45,12 @@ public class CategoryPage extends javax.swing.JFrame {
         categoryTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         txtCategoryName = new javax.swing.JTextField();
-        btnSave = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        btnSave1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         jLabel3.setText("jLabel3");
@@ -68,6 +70,7 @@ public class CategoryPage extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 6, -1, -1));
 
         categoryTable.setBackground(new java.awt.Color(255, 255, 255));
+        categoryTable.setForeground(new java.awt.Color(0, 0, 0));
         categoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null}
@@ -91,18 +94,19 @@ public class CategoryPage extends javax.swing.JFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 100, -1));
 
         txtCategoryName.setBackground(new java.awt.Color(255, 255, 255));
+        txtCategoryName.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 342, 30));
 
-        btnSave.setBackground(new java.awt.Color(0, 0, 102));
-        btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnSave.setForeground(new java.awt.Color(255, 255, 255));
-        btnSave.setText("Save");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        back.setBackground(new java.awt.Color(255, 102, 0));
+        back.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        back.setForeground(new java.awt.Color(255, 255, 255));
+        back.setText("Back to Home");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, -1));
+        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 560, -1, -1));
 
         btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -140,6 +144,17 @@ public class CategoryPage extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 60));
 
+        btnSave1.setBackground(new java.awt.Color(0, 0, 102));
+        btnSave1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSave1.setForeground(new java.awt.Color(255, 255, 255));
+        btnSave1.setText("Save");
+        btnSave1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSave1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSave1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, -1));
+
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 540));
 
@@ -152,7 +167,7 @@ public class CategoryPage extends javax.swing.JFrame {
         try {
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select from 'Category");
+            ResultSet rs = st.executeQuery("SELECT * FROM Category");
             while(rs.next()) {
                 model.addRow(new Object[]{rs.getString("category_id"), rs.getString("category_name")});
             }
@@ -164,27 +179,21 @@ public class CategoryPage extends javax.swing.JFrame {
         btnUpdate.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         // TODO add your handling code here:
-        String categoryName = txtCategoryName.getText();
-        if(validateFields()) {
-            JOptionPane.showMessageDialog(null, "All fields are required");
-        }
-        else {
-            try {
-                Connection con = DBConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("insert into Category (category_name) values(?)");
-                ps.setString(1, categoryName);
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Category added successfully");
-                setVisible(false);
-                new CategoryPage().setVisible(true);
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("CategoryPage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(7); 
+
+            if (nextPage.equals("HomePage")) {
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.dispose();
             }
         }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-    }//GEN-LAST:event_btnSaveActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
@@ -206,32 +215,50 @@ public class CategoryPage extends javax.swing.JFrame {
         
         String name = model.getValueAt(index, 1).toString();
         txtCategoryName.setText(name);
-        btnSave.setEnabled(false);
+        back.setEnabled(false);
         btnUpdate.setEnabled(true);
     }//GEN-LAST:event_categoryTableMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
         String categoryName = txtCategoryName.getText();
-        if(validateFields()) {
+        if (!validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
+            return;
         }
-        else {
-            try {
-                Connection con = DBConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("update Category set name=? where category_i=?");
-                ps.setString(1, categoryName);
-                ps.setInt(2, categoryId);
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Category updated successfully");
-                setVisible(false);
-                new CategoryPage().setVisible(true);
-            }
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE Category SET category_name=? WHERE category_id=?");
+            ps.setString(1, categoryName);
+            ps.setInt(2, categoryId);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Category updated successfully");
+            con.close();
+            setVisible(false);
+            new CategoryPage().setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
+        String categoryName = txtCategoryName.getText();
+        if (!validateFields()) {
+            JOptionPane.showMessageDialog(null, "All fields are required");
+            return;
+        }
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Category (category_name) VALUES (?)");
+            ps.setString(1, categoryName);
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Category added successfully");
+            con.close();
+            setVisible(false);
+            new CategoryPage().setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_btnSave1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,13 +277,13 @@ public class CategoryPage extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageCategory.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategoryPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -269,9 +296,10 @@ public class CategoryPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSave1;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JTable categoryTable;
     private javax.swing.JLabel jLabel1;

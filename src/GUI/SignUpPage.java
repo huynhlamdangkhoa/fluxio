@@ -276,15 +276,12 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
             successLabel.setForeground(java.awt.Color.GREEN);
             javax.swing.JOptionPane.showMessageDialog(this, successLabel, "Success!", javax.swing.JOptionPane.PLAIN_MESSAGE);
 
-            // Tạo đối tượng PageGraph và tìm trang kế tiếp
             PageGraph pageGraph = new PageGraph();
             List<String> adjacentPages = pageGraph.getAdjacentPages("SignUpPage");
             
-            // Giả sử chúng ta chỉ muốn chuyển đến trang đầu tiên trong danh sách
             if (!adjacentPages.isEmpty()) {
-                String nextPage = adjacentPages.get(0); // Ví dụ: chuyển đến LoginPage
+                String nextPage = adjacentPages.get(0); 
 
-                // Kiểm tra nếu trang kế tiếp là LoginPage, sau đó mở nó
                 if (nextPage.equals("LoginPage")) {
                     LoginPage loginPage = new LoginPage();
                     loginPage.setVisible(true);

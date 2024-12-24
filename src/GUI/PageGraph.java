@@ -22,12 +22,17 @@ public class PageGraph {
     // Thêm các mối quan hệ giữa các trang mặc định
     private void addPageRelations() {
         // Ví dụ các trang và các mối quan hệ
-        addEdge("SignUpPage", "LoginPage");
-        addEdge("LoginPage", "HomePage");
-        addEdge("HomePage", "UserPage");
-        addEdge("HomePage", "CategoryPage");
-        addEdge("CategoryPage", "ProductPage");
-        addEdge("ProductPage", "OrderPage");
+        addEdge("SignUpPage", "LoginPage");//0
+        addEdge("LoginPage", "HomePage");//1
+        addEdge("HomePage", "UserPage");//2
+        addEdge("HomePage", "CategoryPage");//3
+        addEdge("HomePage", "ProductPage");//4
+        addEdge("HomePage", "OrderPage");//5
+        addEdge("UserPage", "HomePage");//6
+        addEdge("CategoryPage", "HomePage");//7
+        addEdge("ProductPage", "HomePage");//8
+        addEdge("OrderPage", "HomePage");//9
+        addEdge("HomePage", "LoginPage");//10
     }
 
     // Lấy các trang liên quan đến một trang cụ thể

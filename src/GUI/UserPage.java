@@ -4,11 +4,14 @@
  */
 package GUI;
 
+import DAO.UserDAO;
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import model.User;
 import util.DBConnection;
 
 
@@ -56,7 +59,8 @@ public class UserPage extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
+        Back = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fluxio");
@@ -74,17 +78,19 @@ public class UserPage extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
 
         userTable.setBackground(new java.awt.Color(255, 255, 255));
+        userTable.setForeground(new java.awt.Color(0, 0, 0));
         userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "User Name", "Password", "Email", "Role"
+                "ID", "Name", "Password", "Email"
             }
         ));
+        userTable.setShowGrid(false);
         userTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 userTableMouseClicked(evt);
@@ -168,20 +174,32 @@ public class UserPage extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 70));
 
-        jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 850, 530));
+        Back.setBackground(new java.awt.Color(255, 102, 0));
+        Back.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Back.setForeground(new java.awt.Color(255, 255, 255));
+        Back.setText("Back to Home");
+        Back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackActionPerformed(evt);
+            }
+        });
+        getContentPane().add(Back, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 560, -1, -1));
+
+        jPanel3.setBackground(java.awt.SystemColor.controlHighlight);
+        jPanel3.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 850, 530));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) userTable;
+        DefaultTableModel model = (DefaultTableModel) userTable.getModel(); // Lấy model từ bảng userTable
         try {
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select from user where role='Staff");
-            while(rs.next()) {
+            ResultSet rs = st.executeQuery("SELECT * FROM User WHERE role='Staff'"); // Sửa lỗi câu lệnh SQL
+            while (rs.next()) {
                 model.addRow(new Object[]{rs.getString("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("role")});
             }
         }
@@ -192,89 +210,82 @@ public class UserPage extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentShown
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
         String username = txtUserName.getText();
         String password = txtPassword.getText();
         String email = txtEmail.getText();
-        String role = (String) comboBoxRole.getSelectedItem();
-        
-        if(validateFields("new")) {
+
+        if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All fields are required");
         } else {
-            try{
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("insert into User (username,password, email, role) values (?, ?, ?, ?)");
-            ps.setString(1,username);
-            ps.setString(2, password);
-            ps.setString(3, email);
-            ps.setString(4, role);
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "User added successfully");
-            setVisible(false);
-            new UserPage().setVisible(true);
+            try {
+                UserDAO userDAO = UserDAO.getInstance();
+                int userId = userDAO.generateUserId(); // Sinh ID người dùng mới
+                User user = new User(userId, username, password, email); // Tạo đối tượng User
+
+                int result = userDAO.insert(user); // Thêm người dùng vào cơ sở dữ liệu
+
+                if (result > 0) {
+                    JOptionPane.showMessageDialog(null, "User added successfully");
+                    setVisible(false);
+                    new UserPage().setVisible(true); // Chuyển trang sau khi thêm
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to add user");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(null, e);
-            }
-        } 
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
         // TODO add your handling code here:
         int index = userTable.getSelectedRow();
         TableModel model = userTable.getModel();
-        
-        String id = model.getValueAt(index, 0).toString();
-        user_id = Integer.parseInt(id);
-        
-        String username = model.getValueAt(index, 0).toString();
-        txtUserName.setText(username);
-        
-        String password = model.getValueAt(index, 1).toString();
-        txtPassword.setText(password);
-        
-        String email = model.getValueAt(index, 2).toString();
-        txtEmail.setText(email);
-        
-        String role = model.getValueAt(index, 3).toString();
-        comboBoxRole.removeAll();
-        if(role.equals("Staff")) {
-            comboBoxRole.addItem("Staff");
-            comboBoxRole.addItem("Admin");
+
+        // Lấy ID của người dùng từ bảng
+        user_id = Integer.parseInt(model.getValueAt(index, 0).toString());
+
+        UserDAO userDAO = UserDAO.getInstance();
+        User user = userDAO.selectById(new User(user_id, null, null, null)); // Lấy thông tin người dùng theo userId
+
+        if (user != null) {
+            txtUserName.setText(user.getUsername());
+            txtPassword.setText(user.getPassword());
+            txtEmail.setText(user.getEmail());
+
+            txtPassword.setEditable(false);
+            txtPassword.setBackground(Color.DARK_GRAY);
+
+            btnSave.setEnabled(false);
+            btnUpdate.setEnabled(true);
         } else {
-            comboBoxRole.addItem("Admin");
-            comboBoxRole.addItem("Staff");
+            JOptionPane.showMessageDialog(null, "Failed to fetch user details");
         }
-        txtPassword.setEditable(false);
-        txtPassword.setBackground(Color.DARK_GRAY);
-        
-        btnSave.setEnabled(false);
-        btnUpdate.setEnabled(true);
     }//GEN-LAST:event_userTableMouseClicked
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         String username = txtUserName.getText();
         String email = txtEmail.getText();
-        String role = (String) comboBoxRole.getSelectedItem();
-        
-        if(validateFields("edit")) {
+
+        if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All fields are required");
         } else {
-            try{
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("update User set username=?, email=?, role=? where appuser_pk=?");
-            ps.setString(1,username);
-            ps.setString(2, email);
-            ps.setString(3, role);
-            ps.setInt(4, user_id);
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "User updated successfully");
-            setVisible(false);
-            new UserPage().setVisible(true);
-            }
-            catch(Exception e) {
-                JOptionPane.showMessageDialog(null, e);
+            try {
+                UserDAO userDAO = UserDAO.getInstance();
+                User user = new User(user_id, username, null, email); // Cập nhật user, bỏ qua password (không thay đổi)
+
+                int result = userDAO.update(user); // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+
+                if (result > 0) {
+                    JOptionPane.showMessageDialog(null, "User updated successfully");
+                    setVisible(false);
+                    new UserPage().setVisible(true); // Chuyển trang sau khi cập nhật
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to update user");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -289,6 +300,22 @@ public class UserPage extends javax.swing.JFrame {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_btnCloseActionPerformed
+
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
+        // TODO add your handling code here:
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("UserPage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(6); 
+
+            if (nextPage.equals("HomePage")) {
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_BackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -320,12 +347,13 @@ public class UserPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageUser().setVisible(true);
+                new UserPage().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Back;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
@@ -335,7 +363,7 @@ public class UserPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLable1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPassword;

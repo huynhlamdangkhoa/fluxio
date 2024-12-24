@@ -1,5 +1,6 @@
 package GUI;
 
+import java.util.List;
 import javax.swing.JFrame;
 
 public class OrderPage extends javax.swing.JFrame {
@@ -60,6 +61,7 @@ public class OrderPage extends javax.swing.JFrame {
         btnClose = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
+        back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
 
@@ -81,6 +83,7 @@ public class OrderPage extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, -1, 60));
 
         productListTable.setBackground(new java.awt.Color(255, 255, 255));
+        productListTable.setForeground(new java.awt.Color(0, 0, 0));
         productListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -109,6 +112,7 @@ public class OrderPage extends javax.swing.JFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 90, 37, -1));
 
         cartTable.setBackground(new java.awt.Color(255, 255, 255));
+        cartTable.setForeground(new java.awt.Color(0, 0, 0));
         cartTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -135,7 +139,8 @@ public class OrderPage extends javax.swing.JFrame {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 420, -1, -1));
 
         txtProductName.setBackground(new java.awt.Color(255, 255, 255));
-        txtProductName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtProductName.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 441, 452, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -144,7 +149,8 @@ public class OrderPage extends javax.swing.JFrame {
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, -1, -1));
 
         txtProductPrice.setBackground(new java.awt.Color(255, 255, 255));
-        txtProductPrice.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtProductPrice.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 511, 452, 30));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -153,7 +159,8 @@ public class OrderPage extends javax.swing.JFrame {
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
 
         txtProductDescription.setBackground(new java.awt.Color(255, 255, 255));
-        txtProductDescription.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtProductDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtProductDescription.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 580, 452, 30));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -218,21 +225,19 @@ public class OrderPage extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1180, 70));
 
+        back.setBackground(new java.awt.Color(255, 102, 0));
+        back.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        back.setForeground(new java.awt.Color(255, 255, 255));
+        back.setText("Back to Home");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 740, 120, 30));
+
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jScrollPane4.setBackground(new java.awt.Color(255, 255, 255));
-        jScrollPane4.setForeground(new java.awt.Color(255, 255, 255));
-        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jScrollPane4.setToolTipText("");
-        jScrollPane4.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane4.setAutoscrolls(true);
-        jScrollPane4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane4.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
-        jScrollPane4.setEnabled(false);
-        jScrollPane4.setFocusable(false);
-        jScrollPane4.setRequestFocusEnabled(false);
-        jScrollPane4.setVerifyInputWhenFocusTarget(false);
         jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1180, 730));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1180, 730));
@@ -263,6 +268,22 @@ public class OrderPage extends javax.swing.JFrame {
         setVisible(false);
         new OrderPage().setVisible(true);
     }//GEN-LAST:event_btnResetActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("OrderPage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(9); 
+
+            if (nextPage.equals("HomePage")) {
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_backActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -297,6 +318,7 @@ public class OrderPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
     private javax.swing.JTable cartTable;

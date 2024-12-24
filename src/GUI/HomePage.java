@@ -1,6 +1,7 @@
 
 package GUI;
 
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class HomePage extends javax.swing.JFrame {
@@ -129,32 +130,82 @@ public class HomePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
-        new UserPage().setVisible(true);
-        this.setVisible(false); 
+// TODO add your handling code here:
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(2); 
+
+            if (nextPage.equals("UserPage")) {
+                UserPage userPage = new UserPage();
+                userPage.setVisible(true);
+                this.dispose();
+            }
+        } 
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         int a = JOptionPane.showConfirmDialog(null, "Do you want to log out?", "Log out", JOptionPane.YES_NO_OPTION);
         if(a == 0) {
-            setVisible(false);
-            new LoginPage().setVisible(true);
-        }
-        this.setVisible(false); 
+            PageGraph pageGraph = new PageGraph();
+            List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
+
+            if (!adjacentPages.isEmpty()) {
+                String nextPage = adjacentPages.get(10); 
+
+                if (nextPage.equals("LoginPage")) {
+                    LoginPage loginPage = new LoginPage();
+                    loginPage.setVisible(true);
+                    this.dispose();
+                }
+            } 
+        } 
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        new CategoryPage().setVisible(true);
-        this.setVisible(false); 
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(3); 
+
+            if (nextPage.equals("CategoryPage")) {
+                CategoryPage categoryPage = new CategoryPage();
+                categoryPage.setVisible(true);
+                this.dispose();
+            }
+        }  
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.setVisible(false);
-        new ProductPage().setVisible(true);
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(4); 
+
+            if (nextPage.equals("ProductPage")) {
+                ProductPage productPage = new ProductPage();
+                productPage.setVisible(true);
+                this.dispose();
+            }
+        }  
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new UserPage().setVisible(true);
-        this.setVisible(false); 
+        PageGraph pageGraph = new PageGraph();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("HomePage");
+            
+        if (!adjacentPages.isEmpty()) {
+            String nextPage = adjacentPages.get(5); 
+
+            if (nextPage.equals("OrderPage")) {
+                OrderPage orderPage = new OrderPage();
+                orderPage.setVisible(true);
+                this.dispose();
+            }
+        }  
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
