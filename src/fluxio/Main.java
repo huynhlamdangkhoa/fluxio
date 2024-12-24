@@ -10,25 +10,10 @@ import javax.swing.JFrame;
 
 public class Main {
     public static void main(String[] args) {
-        HomePage home = new HomePage();
-        home.setVisible(true);
-        home.pack();
-        home.setLocationRelativeTo(null);
-        home.setResizable(true);
-        
-        
-//        ProductPage product = new ProductPage();
-//        product.setVisible(true);
-//        product.pack();
-//        product.setLocationRelativeTo(null);
-//        product.setResizable(true);
-        
-
-        
-//        SignUpPage signUpPage = new SignUpPage();
-//        signUpPage.setVisible(true);
-//        signUpPage.pack();
-//        signUpPage.setLocationRelativeTo(null);
+        SignUpPage signUpPage = new SignUpPage();
+        signUpPage.setVisible(true);
+        signUpPage.pack();
+        signUpPage.setLocationRelativeTo(null);
 
         Connection connection = DBConnection.getConnection();
         DBConnection.printInfo(connection);
@@ -37,9 +22,6 @@ public class Main {
             String sqlFilePath = "src/util/inventorydatabase.sql"; 
             DBConnection.runSQLScript(sqlFilePath);
         }
-
-        // Close the connection when the application is exiting, if needed
-        // Runtime.getRuntime().addShutdownHook(new Thread(() -> DBConnection.closeConnection(connection)));
     }
 }
     
