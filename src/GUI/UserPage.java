@@ -11,17 +11,14 @@ import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import util.DBConnection;
 
-/**
- *
- * @author Hoang Nguyen
- */
-public class ManageUser extends javax.swing.JFrame {
+
+public class UserPage extends javax.swing.JFrame {
     private int user_id = 0;
 
     /**
      * Creates new form ManageUser
      */
-    public ManageUser() {
+    public UserPage() {
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -54,15 +51,15 @@ public class ManageUser extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
-        comboBoxRole = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setFocusable(false);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -70,10 +67,12 @@ public class ManageUser extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Mange User");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(376, 6, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
 
+        userTable.setBackground(new java.awt.Color(255, 255, 255));
         userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -92,70 +91,84 @@ public class ManageUser extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(userTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 53, -1, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 430, 450));
 
-        jLable1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLable1.setForeground(new java.awt.Color(0, 0, 0));
         jLable1.setText("User Name");
-        getContentPane().add(jLable1, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 53, -1, -1));
-        getContentPane().add(txtUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 86, 342, -1));
+        getContentPane().add(jLable1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtUserName.setBackground(new java.awt.Color(255, 255, 255));
+        txtUserName.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 130, 342, 30));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Password");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 126, -1, -1));
-        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 159, 342, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtPassword.setBackground(new java.awt.Color(255, 255, 255));
+        txtPassword.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 200, 340, 30));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Email");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 199, 37, -1));
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 232, 342, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 260, 37, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel4.setText("Role");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 272, 37, -1));
+        txtEmail.setBackground(new java.awt.Color(255, 255, 255));
+        txtEmail.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 280, 340, 30));
 
+        btnSave.setBackground(new java.awt.Color(0, 0, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 344, -1, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, -1, -1));
 
+        btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(566, 344, -1, -1));
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, -1, -1));
 
+        btnReset.setBackground(new java.awt.Color(0, 0, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(656, 344, -1, -1));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 350, -1, -1));
 
+        btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnClose.setForeground(new java.awt.Color(255, 255, 255));
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(746, 344, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 350, -1, -1));
 
-        comboBoxRole.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        comboBoxRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Staff", "Admin" }));
-        getContentPane().add(comboBoxRole, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 305, -1, -1));
+        jPanel1.setBackground(new java.awt.Color(255, 102, 0));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 70));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/background_orange.jpg"))); // NOI18N
-        jLabel5.setText("jLabel5");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 600));
+        jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 850, 530));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -197,7 +210,7 @@ public class ManageUser extends javax.swing.JFrame {
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "User added successfully");
             setVisible(false);
-            new ManageUser().setVisible(true);
+            new UserPage().setVisible(true);
             }
             catch(Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -257,7 +270,7 @@ public class ManageUser extends javax.swing.JFrame {
             ps.executeUpdate();
             JOptionPane.showMessageDialog(null, "User updated successfully");
             setVisible(false);
-            new ManageUser().setVisible(true);
+            new UserPage().setVisible(true);
             }
             catch(Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -268,7 +281,7 @@ public class ManageUser extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        new ManageUser().setVisible(true);
+        new UserPage().setVisible(true);
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -293,13 +306,13 @@ public class ManageUser extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -316,13 +329,12 @@ public class ManageUser extends javax.swing.JFrame {
     private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JComboBox<String> comboBoxRole;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLable1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtPassword;

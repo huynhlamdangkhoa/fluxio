@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package GUI;
 
 import javax.swing.table.DefaultTableModel;
@@ -10,19 +6,18 @@ import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import util.DBConnection;
 
-/**
- *
- * @author Hoang Nguyen
- */
-public class ManageCategory extends javax.swing.JFrame {
+
+public class CategoryPage extends javax.swing.JFrame {
     private int categoryId = 0;
 
     /**
      * Creates new form ManageCategory
      */
-    public ManageCategory() {
+    public CategoryPage() {
         initComponents();
         setLocationRelativeTo(null);
+        setResizable(false);
+        
     }
     
     private boolean validateFields() {
@@ -53,12 +48,12 @@ public class ManageCategory extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
 
         jLabel3.setText("jLabel3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -67,9 +62,11 @@ public class ManageCategory extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Manage Category");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 6, -1, -1));
 
+        categoryTable.setBackground(new java.awt.Color(255, 255, 255));
         categoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null}
@@ -85,52 +82,65 @@ public class ManageCategory extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(categoryTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 68, -1, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 440, -1));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Category Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 127, 100, -1));
-        getContentPane().add(txtCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 160, 342, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 120, 100, -1));
 
+        txtCategoryName.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(txtCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 342, 30));
+
+        btnSave.setBackground(new java.awt.Color(0, 0, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(476, 200, -1, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, -1));
 
+        btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(566, 200, -1, -1));
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, -1, -1));
 
+        btnReset.setBackground(new java.awt.Color(0, 0, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset.setForeground(new java.awt.Color(255, 255, 255));
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(656, 200, -1, -1));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, -1, -1));
 
+        btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnClose.setForeground(new java.awt.Color(255, 255, 255));
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(746, 200, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 200, -1, -1));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/background_orange.jpg"))); // NOI18N
-        jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 600));
+        jPanel1.setBackground(new java.awt.Color(255, 102, 0));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 60));
+
+        jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 540));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -167,7 +177,7 @@ public class ManageCategory extends javax.swing.JFrame {
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Category added successfully");
                 setVisible(false);
-                new ManageCategory().setVisible(true);
+                new CategoryPage().setVisible(true);
             }
         }
             catch(Exception e) {
@@ -178,7 +188,7 @@ public class ManageCategory extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        new ManageCategory().setVisible(true);
+        new CategoryPage().setVisible(true);
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -214,7 +224,7 @@ public class ManageCategory extends javax.swing.JFrame {
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Category updated successfully");
                 setVisible(false);
-                new ManageCategory().setVisible(true);
+                new CategoryPage().setVisible(true);
             }
         }
             catch(Exception e) {
@@ -252,7 +262,7 @@ public class ManageCategory extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageCategory().setVisible(true);
+                new CategoryPage().setVisible(true);
             }
         });
     }
@@ -266,7 +276,8 @@ public class ManageCategory extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtCategoryName;
     // End of variables declaration//GEN-END:variables

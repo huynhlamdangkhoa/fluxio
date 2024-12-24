@@ -5,24 +5,21 @@
 package GUI;
 
 import java.sql.*;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import util.DBConnection;
-/**
- *
- * @author Hoang Nguyen
- */
-public class ManageProduct extends javax.swing.JFrame {
+
+public class ProductPage extends javax.swing.JFrame {
     private int productId = 0;
     private int totalQuantity = 0;
 
     /**
      * Creates new form ManageProduct
      */
-    public ManageProduct() {
+    public ProductPage() {
         initComponents();
-        setLocationRelativeTo(null);
     }
     
     private void getAllCategory() {
@@ -59,7 +56,6 @@ public class ManageProduct extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -73,13 +69,20 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         comboBoxCategory = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
-        btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btnReset1 = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
+        setAutoRequestFocus(false);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setEnabled(false);
+        setFocusable(false);
+        setFocusableWindowState(false);
+        setLocationByPlatform(true);
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -87,10 +90,11 @@ public class ManageProduct extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("Manage Product");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, -1, -1));
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
 
+        productTable.setBackground(new java.awt.Color(255, 255, 255));
+        productTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        productTable.setForeground(new java.awt.Color(255, 255, 255));
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -102,6 +106,15 @@ public class ManageProduct extends javax.swing.JFrame {
                 "ID", "Name", "Price", "Quantity", "Description", "Category ID", "Category Name"
             }
         ));
+        productTable.setGridColor(new java.awt.Color(51, 51, 51));
+        productTable.setSelectionBackground(new java.awt.Color(0, 0, 0));
+        productTable.setSelectionForeground(new java.awt.Color(0, 0, 102));
+        productTable.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        productTable.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        productTable.setShowGrid(true);
+        productTable.setShowHorizontalLines(false);
+        productTable.setShowVerticalLines(false);
+        productTable.setSurrendersFocusOnKeystroke(true);
         productTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productTableMouseClicked(evt);
@@ -109,75 +122,111 @@ public class ManageProduct extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(productTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 495, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 80, 540, 470));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 37, -1));
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 110, 342, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, 37, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtName.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 98, 330, 30));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Price");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 150, 37, -1));
-        getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 180, 342, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 150, 37, -1));
 
-        lblQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtPrice.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 168, 330, 30));
+
+        lblQuantity.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblQuantity.setForeground(new java.awt.Color(0, 0, 0));
         lblQuantity.setText("Quantity");
-        getContentPane().add(lblQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 220, -1, -1));
-        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 260, 342, -1));
+        getContentPane().add(lblQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 218, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtQuantity.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 236, 330, 30));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Description");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, -1, -1));
-        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 330, 342, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, -1, -1));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtDescription.setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().add(txtDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 322, 330, 30));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Category");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 370, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 370, -1, -1));
 
-        comboBoxCategory.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        comboBoxCategory.setBackground(new java.awt.Color(255, 255, 255));
+        comboBoxCategory.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboBoxCategory.setForeground(new java.awt.Color(102, 102, 102));
         comboBoxCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(comboBoxCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 400, 342, -1));
+        getContentPane().add(comboBoxCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 391, 330, 30));
 
+        btnSave.setBackground(new java.awt.Color(0, 0, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(255, 255, 255));
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 440, -1, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 440, 330, -1));
 
-        btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 440, -1, -1));
-
-        btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnReset.setText("Reset");
-        btnReset.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnResetActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 440, -1, -1));
-
+        btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnClose.setForeground(new java.awt.Color(255, 255, 255));
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 440, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 530, 330, -1));
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/background_orange.jpg"))); // NOI18N
-        jLabel4.setText("jLabel4");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(-150, -10, 1140, 630));
+        jPanel1.setBackground(new java.awt.Color(255, 102, 0));
+        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLabel1.setBackground(new java.awt.Color(255, 102, 0));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Manage Product");
+        jLabel1.setAlignmentY(0.0F);
+        jLabel1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        jLabel1.setOpaque(true);
+        jPanel1.add(jLabel1);
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 60));
+
+        btnReset1.setBackground(new java.awt.Color(0, 0, 102));
+        btnReset1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnReset1.setForeground(new java.awt.Color(255, 255, 255));
+        btnReset1.setText("Reset");
+        btnReset1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReset1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReset1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 500, 330, -1));
+
+        btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
+        btnUpdate.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 470, 330, -1));
+
+        jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 920, 510));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -206,12 +255,6 @@ public class ManageProduct extends javax.swing.JFrame {
         setVisible(false);
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        // TODO add your handling code here:
-        setVisible(false);
-        new ManageProduct().setVisible(true);
-    }//GEN-LAST:event_btnResetActionPerformed
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         String name = txtName.getText();
@@ -235,7 +278,7 @@ public class ManageProduct extends javax.swing.JFrame {
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Product added successfully");
                 setVisible(false);
-                new ManageProduct().setVisible(true);
+                new ProductPage().setVisible(true);
             }
             catch(Exception e){
                 JOptionPane.showMessageDialog(null, e);
@@ -286,39 +329,12 @@ public class ManageProduct extends javax.swing.JFrame {
         btnUpdate.setEnabled(true);
     }//GEN-LAST:event_productTableMouseClicked
 
+    private void btnReset1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReset1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnReset1ActionPerformed
+
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        String name = txtName.getText();
-        String price  = txtPrice.getText();
-        String quantity = txtQuantity.getText();
-        String description = txtDescription.getText();
-        String category = (String) comboBoxCategory.getSelectedItem();
-        String categoryId[] = category.split("-", 0);
-        if(validateFields("edit")) {
-            JOptionPane.showMessageDialog(null, "All fileds are requied");
-        }
-        else {
-            try {
-                if(!quantity.equals("")) {
-                    totalQuantity = totalQuantity + Integer.parseInt(quantity);
-                }
-                Connection con = DBConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("update Product set name=?,price=?,quantity=?,description=?,category_id where product_id=?");
-                ps.setString(1, name);
-                ps.setString(2, price);
-                ps.setInt(3, totalQuantity);
-                ps.setString(4, description);
-                ps.setString(5, categoryId[0]);
-                ps.setInt(6, productId);
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Product updated successfully");
-                setVisible(false);
-                new ManageProduct().setVisible(true);
-            }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
-        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
@@ -338,36 +354,37 @@ public class ManageProduct extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ProductPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ManageProduct().setVisible(true);
+                new ProductPage().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
-    private javax.swing.JButton btnReset;
+    private javax.swing.JButton btnReset1;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> comboBoxCategory;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblQuantity;
     private javax.swing.JTable productTable;
