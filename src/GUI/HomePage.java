@@ -205,7 +205,8 @@ public class HomePage extends javax.swing.JFrame {
                 System.out.println("ProductPage found! Navigating...");  
                 ProductPage productPage = new ProductPage();  
                 productPage.setVisible(true);
-                this.setVisible(false);  
+                HomePage homePage = new HomePage();
+                homePage.dispose();
                 break; 
             }
         }

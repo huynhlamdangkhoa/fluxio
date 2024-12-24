@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/CS%20Projects/fluxio/src/GUI/ProductPage.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/GUI/HomePage.java</file>
             <file>file:/E:/CS%20Projects/fluxio/src/fluxio/Main.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/DAO/ProductDAO.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/service/ProductService.java</file>
+            <file>file:/E:/CS%20Projects/fluxio/src/model/Product.java</file>
         </group>
     </open-files>
 </project-private>

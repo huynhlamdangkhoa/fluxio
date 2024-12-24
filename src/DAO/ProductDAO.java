@@ -20,8 +20,8 @@ public class ProductDAO implements DAOInterface<Product> {
         Random random = new Random();
         int productId;
         do {
-            productId = 100000 + random.nextInt(900000); // Generates a number between 100 and 999
-        } while (usedProductIds.contains(productId));
+            productId = 100000 + random.nextInt(900000); // Tạo số từ 100000 đến 999999
+        } while (usedProductIds.contains(productId) || idExistsInDatabase(productId));
         usedProductIds.add(productId);
         return productId;
     }
@@ -41,9 +41,9 @@ public class ProductDAO implements DAOInterface<Product> {
 
     @Override
     public int insert(Product product) {
-        String sql = "INSERT IGNORE INTO Product (product_id, product_name, category_id, price, stock_quantity, description) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Product (product_id, product_name, category_id, price, stock_quantity, description) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             int productId = generateProductId();
             product.setProductId(productId);
             statement.setInt(1, productId);
@@ -57,6 +57,7 @@ public class ProductDAO implements DAOInterface<Product> {
             throw new RuntimeException("Error inserting product", e);
         }
     }
+
 
     @Override
     public int update(Product product) {
@@ -92,8 +93,8 @@ public class ProductDAO implements DAOInterface<Product> {
         String sql = "SELECT * FROM Product";
         List<Product> products = new ArrayList<>();
         try (Connection connection = DBConnection.getConnection();
-            Statement statement = connection.createStatement(); 
-            ResultSet resultSet = statement.executeQuery(sql)) {
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 int id = resultSet.getInt("product_id");
                 String productName = resultSet.getString("product_name");
@@ -102,13 +103,16 @@ public class ProductDAO implements DAOInterface<Product> {
                 int quantity = resultSet.getInt("stock_quantity");
                 String description = resultSet.getString("description");
                 products.add(new Product(id, productName, categoryId, price, quantity, description));
-                usedProductIds.add(id); // Populate used IDs to prevent duplicates
+                if (!usedProductIds.contains(id)) {
+                    usedProductIds.add(id); // Đảm bảo không trùng lặp
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all products", e);
         }
         return (ArrayList<Product>) products;
     }
+
 
     @Override
     public Product selectById(Product product) {

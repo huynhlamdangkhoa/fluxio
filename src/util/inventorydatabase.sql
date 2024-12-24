@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Category (
 
 -- Product(int productId, String productName, int quantity, Double price, int categoryID)
 CREATE TABLE IF NOT EXISTS Product (
-    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
     category_id INT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
@@ -49,7 +49,7 @@ INSERT IGNORE INTO Category (category_name) VALUES
 ('Electronics'),
 ('Clothing');
 
-INSERT IGNORE INTO Product (product_name, category_id, price, stock_quantity, description) VALUES
+INSERT IGNORE INTO Product (product_id,product_name, category_id, price, stock_quantity, description) VALUES
 ('Smartphone', 1, 699.99, 50, 'Latest model smartphone'),
 ('Jeans', 2, 49.99, 100, 'Denim jeans in various sizes');
 

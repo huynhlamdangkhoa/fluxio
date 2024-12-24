@@ -102,10 +102,7 @@ public class ProductPage extends javax.swing.JFrame {
         productTable.setForeground(new java.awt.Color(0, 0, 0));
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID", "Name", "Price", "Quantity", "Description", "Category ID", "Category Name"
@@ -127,7 +124,7 @@ public class ProductPage extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(productTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 540, 510));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 550, 510));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
@@ -262,7 +259,7 @@ public class ProductPage extends javax.swing.JFrame {
         searchProduct.setBackground(new java.awt.Color(255, 102, 0));
         searchProduct.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchProduct.setForeground(new java.awt.Color(255, 255, 255));
-        searchProduct.setText("   Search");
+        searchProduct.setText("  Search");
         searchProduct.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchProductActionPerformed(evt);

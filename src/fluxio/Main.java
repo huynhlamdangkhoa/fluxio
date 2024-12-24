@@ -10,10 +10,10 @@ import javax.swing.JFrame;
 
 public class Main {
     public static void main(String[] args) {
-        SignUpPage signUpPage = new SignUpPage();
-        signUpPage.setVisible(true);
-        signUpPage.pack();
-        signUpPage.setLocationRelativeTo(null);
+        HomePage HomePage = new HomePage();
+        HomePage.setVisible(true);
+        HomePage.pack();
+        HomePage.setLocationRelativeTo(null);
 
         Connection connection = DBConnection.getConnection();
         DBConnection.printInfo(connection);
