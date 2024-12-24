@@ -8,6 +8,7 @@ public class SignUpPage extends javax.swing.JFrame {
 
     public SignUpPage() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")

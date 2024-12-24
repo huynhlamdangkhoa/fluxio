@@ -20,16 +20,17 @@ public class ProductPage extends javax.swing.JFrame {
      */
     public ProductPage() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     
     private void getAllCategory() {
         try{
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select from 'Category");
+            ResultSet rs = st.executeQuery("SELECT * FROM Category");
             comboBoxCategory.removeAllItems();
             while(rs.next()) {
-                comboBoxCategory.addItem(rs.getString("category_id")+"-"+rs.getString("name"));
+                comboBoxCategory.addItem(rs.getString("category_id")+"-"+rs.getString("category_name"));
             }
         }
         catch(Exception e) {
@@ -38,13 +39,12 @@ public class ProductPage extends javax.swing.JFrame {
     }
     
     private boolean validateFields(String formType) {
-        if(formType.equals("edit") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")) {
-            return false;
-        } else if(formType.equals("new") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("") && !txtQuantity.getText().equals("")) {
-            return false;
-        } else {
-            return true;
+        if (formType.equals("edit")) {
+            return !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtDescription.getText().isEmpty();
+        } else if (formType.equals("new")) {
+            return !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtDescription.getText().isEmpty() && !txtQuantity.getText().isEmpty();
         }
+        return false;
     }
 
     /**
@@ -77,9 +77,10 @@ public class ProductPage extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Fluxio");
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(255, 255, 255));
-        setEnabled(false);
+        setFocusCycleRoot(false);
         setFocusable(false);
         setFocusableWindowState(false);
         setLocationByPlatform(true);
@@ -226,6 +227,8 @@ public class ProductPage extends javax.swing.JFrame {
         getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 470, 330, -1));
 
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
+        jPanel2.setAutoscrolls(true);
+        jPanel2.setFocusTraversalPolicyProvider(true);
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 920, 510));
 
         pack();
@@ -238,9 +241,13 @@ public class ProductPage extends javax.swing.JFrame {
         try {
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select 'from Product inner join category on Product.category_id = Category.category_id");
+            ResultSet rs = st.executeQuery(
+                "SELECT Product.product_id, Product.product_name, Product.price, Product.stock_quantity, Product.description, " +
+                "Category.category_id, Category.category_name AS category_name " +
+                "FROM Product INNER JOIN Category ON Product.category_id = Category.category_id"
+            );
             while(rs.next()) {
-                model.addRow(new Object[]{rs.getString("product_id"), rs.getString("name"), rs.getString("price"), rs.getString("quantity"), rs.getString("description"), rs.getString("category_id")});
+                model.addRow(new Object[]{rs.getString("product_id"), rs.getString("product_name"), rs.getString("price"), rs.getString("stock_quantity"), rs.getString("description"), rs.getString("category_id")});
             }
         }
         catch(Exception e) {
@@ -256,20 +263,18 @@ public class ProductPage extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
         String name = txtName.getText();
-        String price  = txtPrice.getText();
+        String price = txtPrice.getText();
         String quantity = txtQuantity.getText();
         String description = txtDescription.getText();
         String category = (String) comboBoxCategory.getSelectedItem();
-        String categoryId[] = category.split("-", 0);
-        if(validateFields("new")) {
-            JOptionPane.showMessageDialog(null, "All fileds are requied");
-        }
-        else {
-            try{
+        String[] categoryId = category.split("-", 0);
+        if (validateFields("new")) {
+            JOptionPane.showMessageDialog(null, "All fields are required");
+        } else {
+            try {
                 Connection con = DBConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("insert into Product (name, price, quantity, description, category_id) values(?,?,?,?,?)");
+                PreparedStatement ps = con.prepareStatement("INSERT INTO Product (name, price, quantity, description, category_id) VALUES (?, ?, ?, ?, ?)");
                 ps.setString(1, name);
                 ps.setString(2, price);
                 ps.setString(3, quantity);
@@ -277,10 +282,8 @@ public class ProductPage extends javax.swing.JFrame {
                 ps.setString(5, categoryId[0]);
                 ps.executeUpdate();
                 JOptionPane.showMessageDialog(null, "Product added successfully");
-                setVisible(false);
-                new ProductPage().setVisible(true);
-            }
-            catch(Exception e){
+                refreshProductTable(); // Refresh table after adding
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
@@ -315,10 +318,10 @@ public class ProductPage extends javax.swing.JFrame {
         try{
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select from 'Category");
+            ResultSet rs = st.executeQuery("SELECT * FROM Category");
             while(rs.next()) {
                 if(Integer.parseInt(categoryId) != rs.getInt(1)) 
-                comboBoxCategory.addItem(rs.getString("category_id")+"-"+rs.getString("name"));
+                comboBoxCategory.addItem(rs.getString("category_id")+"-"+rs.getString("category_name"));
             }
         }
         catch(Exception e) {
@@ -371,6 +374,35 @@ public class ProductPage extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void loadProductTable() {
+        try {
+            Connection con = DBConnection.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Product INNER JOIN Category ON Product.category_id = Category.category_id");
+            DefaultTableModel model = (DefaultTableModel) productTable.getModel();
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("product_id"),
+                    rs.getString("product_name"),
+                    rs.getString("price"),
+                    rs.getString("stock_quantity"),
+                    rs.getString("description"),
+                    rs.getString("category_id"),
+                   });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    
+    private void refreshProductTable() {
+        DefaultTableModel model = (DefaultTableModel) productTable.getModel();
+        model.setRowCount(0); // Clear the table
+        loadProductTable(); // Call a method to reload data from the database
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
