@@ -12,12 +12,12 @@ public class Product {
     private String description;
     private Category category;
     
-    public Product(int productId, String productName, int categoryId, double price, int quantity, String description){
+    public Product(int productId, String productName, int stockQuantity, double price, int categoryId, String description) {
         this.productId = productId;
         this.productName = productName;
-        this.categoryId = categoryId;
+        this.quantity = stockQuantity;
         this.price = price;
-        this.quantity = quantity;
+        this.categoryId = categoryId;
         this.description = description;
     }
     

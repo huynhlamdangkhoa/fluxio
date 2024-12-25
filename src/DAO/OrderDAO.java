@@ -4,36 +4,65 @@ import model.Order;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import util.DBConnection;
 
 public class OrderDAO implements DAOInterface<Order> {
+    private static final HashSet<Integer> usedOrderIds = new HashSet<>();
+
     public static OrderDAO getInstance() {
         return new OrderDAO();
     }
 
+    public int generateOrderId() {
+        Random random = new Random();
+        int userId;
+        do {
+            userId = 100 + random.nextInt(999); 
+        } while (usedOrderIds.contains(userId) || idExistsInDatabase(userId));
+        usedOrderIds.add(userId);
+        return userId;
+    }
+    
+        private boolean idExistsInDatabase(int productId) {
+        String sql = "SELECT 1 FROM Category WHERE category_id = ?";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, productId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error checking category ID existence", e);
+        }
+    }
+
     @Override
     public int insert(Order order) {
-        String sql = "INSERT INTO orders (total_amount, order_date, status, shipping_address, payment_method) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO orders (order_id, total_amount, order_date, status, shipping_address, payment_method) VALUES (?, ?, ?, ?, ?, ?)";
+        int userId = generateOrderId();
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setDouble(1, order.getTotalAmount());
-            statement.setTimestamp(2, Timestamp.valueOf(order.getOrderDate()));
-            statement.setString(3, order.getStatus());
-            statement.setString(4, order.getShippingAddress());
-            statement.setString(5, order.getPaymentMethod());
-            statement.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            statement.setDouble(2, order.getTotalAmount());
+            statement.setTimestamp(3, Timestamp.valueOf(order.getOrderDate()));
+            statement.setString(4, order.getStatus());
+            statement.setString(5, order.getShippingAddress());
+            statement.setString(6, order.getPaymentMethod());
+            int rowsInserted = statement.executeUpdate();
 
-            try (ResultSet keys = statement.getGeneratedKeys()) {
-                if (keys.next()) {
-                    order.setOrderId(keys.getInt(1));
-                }
+            if (rowsInserted > 0) {
+                order.setOrderId(userId);
+                return userId;
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting order", e);
         }
         return 0;
     }
+
 
     @Override
     public int update(Order order) {

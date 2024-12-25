@@ -1,7 +1,13 @@
 package GUI;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import util.DBConnection;
 
 public class OrderPage extends javax.swing.JFrame {
     private int productId = 0;
@@ -39,12 +45,8 @@ public class OrderPage extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        productListTable = new javax.swing.JTable();
+        orderTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        cartTable = new javax.swing.JTable();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtProductName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -53,23 +55,23 @@ public class OrderPage extends javax.swing.JFrame {
         txtProductDescription = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtOrderQuantity = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        lblFinalTotalPrice = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         back = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        txtProductDescription1 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtOrderQuantity1 = new javax.swing.JTextField();
+        add = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
 
         jLabel10.setText("jLabel10");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fluxio");
-        setBackground(java.awt.SystemColor.controlHighlight);
+        setBackground(new java.awt.Color(255, 102, 0));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -82,122 +84,64 @@ public class OrderPage extends javax.swing.JFrame {
         jLabel1.setText("Manage Order");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, -1, 60));
 
-        productListTable.setBackground(new java.awt.Color(255, 255, 255));
-        productListTable.setForeground(new java.awt.Color(0, 0, 0));
-        productListTable.setModel(new javax.swing.table.DefaultTableModel(
+        orderTable.setBackground(new java.awt.Color(255, 255, 255));
+        orderTable.setForeground(new java.awt.Color(0, 0, 0));
+        orderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "ID", "Name", "Price", "Quantity", "Description", "Category ID", "Category Name"
+                "Total amount", "Order date", "Status", "Address", "Payment Method"
             }
         ));
-        jScrollPane1.setViewportView(productListTable);
+        jScrollPane1.setViewportView(orderTable);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, 261));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 530, 600));
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Product List");
+        jLabel2.setText("Order List");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 90, -1, -1));
-
-        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Cart");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 90, 37, -1));
-
-        cartTable.setBackground(new java.awt.Color(255, 255, 255));
-        cartTable.setForeground(new java.awt.Color(0, 0, 0));
-        cartTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Product ID", "Name", "Quantity", "Price", "Description", "Sub Total"
-            }
-        ));
-        jScrollPane2.setViewportView(cartTable);
-
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 110, -1, 261));
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Selected Product:");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Product Name");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 420, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 110, -1, -1));
 
         txtProductName.setBackground(new java.awt.Color(255, 255, 255));
         txtProductName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtProductName.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 441, 452, 30));
+        getContentPane().add(txtProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 130, 452, 30));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Product Price");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, -1, -1));
 
         txtProductPrice.setBackground(new java.awt.Color(255, 255, 255));
         txtProductPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtProductPrice.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtProductPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 511, 452, 30));
+        getContentPane().add(txtProductPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 200, 452, 30));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Product Description");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 390, -1, -1));
 
         txtProductDescription.setBackground(new java.awt.Color(255, 255, 255));
         txtProductDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtProductDescription.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 580, 452, 30));
+        getContentPane().add(txtProductDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 410, 452, 30));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Order Quantity");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 630, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 460, -1, -1));
 
         txtOrderQuantity.setBackground(new java.awt.Color(255, 255, 255));
         txtOrderQuantity.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        getContentPane().add(txtOrderQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 650, 452, 30));
-
-        jButton1.setBackground(new java.awt.Color(0, 0, 102));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Add To Cart");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 700, 452, 40));
-
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel9.setText("Total Amount RS:");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 380, -1, -1));
-
-        lblFinalTotalPrice.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblFinalTotalPrice.setForeground(new java.awt.Color(0, 0, 0));
-        lblFinalTotalPrice.setText("00000");
-        getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 380, -1, -1));
-
-        jButton2.setBackground(new java.awt.Color(0, 0, 102));
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Save Order Details");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 440, 450, 40));
+        getContentPane().add(txtOrderQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 480, 452, 30));
 
         btnReset.setBackground(new java.awt.Color(0, 0, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -208,7 +152,7 @@ public class OrderPage extends javax.swing.JFrame {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 500, 450, 40));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 610, 450, 40));
 
         btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -219,10 +163,11 @@ public class OrderPage extends javax.swing.JFrame {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 560, 450, 40));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 670, 450, 40));
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, -1, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1180, 70));
 
         back.setBackground(new java.awt.Color(255, 102, 0));
@@ -236,10 +181,38 @@ public class OrderPage extends javax.swing.JFrame {
         });
         getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 740, 120, 30));
 
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Product Description");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, -1, -1));
+
+        txtProductDescription1.setBackground(new java.awt.Color(255, 255, 255));
+        txtProductDescription1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtProductDescription1.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtProductDescription1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 270, 452, 30));
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Order Quantity");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 320, -1, -1));
+
+        txtOrderQuantity1.setBackground(new java.awt.Color(255, 255, 255));
+        txtOrderQuantity1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        getContentPane().add(txtOrderQuantity1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 340, 452, 30));
+
+        add.setBackground(new java.awt.Color(0, 0, 102));
+        add.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        add.setForeground(new java.awt.Color(255, 255, 255));
+        add.setText("Add Order");
+        add.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addActionPerformed(evt);
+            }
+        });
+        getContentPane().add(add, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 550, 450, 40));
+
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1180, 730));
-
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1180, 730));
 
         pack();
@@ -252,11 +225,19 @@ public class OrderPage extends javax.swing.JFrame {
         txtProductDescription.setEditable(false);
         txtProductName.setEditable(false);
         txtProductName.setEditable(false);
+        DefaultTableModel model = (DefaultTableModel) orderTable.getModel();
+        try {
+            Connection con = DBConnection.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM Category");
+            while(rs.next()) {
+                model.addRow(new Object[]{rs.getString("category_id"), rs.getString("category_name")});
+            }
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_formComponentShown
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
@@ -294,6 +275,10 @@ public class OrderPage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_backActionPerformed
 
+    private void addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -325,34 +310,32 @@ public class OrderPage extends javax.swing.JFrame {
             }
         });
     }
+    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add;
     private javax.swing.JButton back;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
-    private javax.swing.JTable cartTable;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JLabel lblFinalTotalPrice;
-    private javax.swing.JTable productListTable;
+    private javax.swing.JTable orderTable;
     private javax.swing.JTextField txtOrderQuantity;
+    private javax.swing.JTextField txtOrderQuantity1;
     private javax.swing.JTextField txtProductDescription;
+    private javax.swing.JTextField txtProductDescription1;
     private javax.swing.JTextField txtProductName;
     private javax.swing.JTextField txtProductPrice;
     // End of variables declaration//GEN-END:variables

@@ -20,7 +20,7 @@ public class CategoryDAO implements DAOInterface<Category> {
         Random random = new Random();
         int categoryId;
         do {
-            categoryId = 100 + random.nextInt(900); // Generates a number between 100 and 999
+            categoryId = 1000 + random.nextInt(9999);
         } while (usedCategoryIds.contains(categoryId) || idExistsInDatabase(categoryId));
         usedCategoryIds.add(categoryId);
         return categoryId;
@@ -44,11 +44,11 @@ public class CategoryDAO implements DAOInterface<Category> {
         String sql = "INSERT IGNORE INTO Category (category_id, category_name) VALUES (?, ?)";
         try (Connection connection = DBConnection.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            int categoryId = generateCategoryId(); // Generate and assign unique ID
-            category.setCategoryId(categoryId); // Update the ID in the object
+            int categoryId = generateCategoryId(); 
+            category.setCategoryId(categoryId); 
             statement.setInt(1, categoryId);
             statement.setString(2, category.getCategoryName());
-            return statement.executeUpdate(); // Return rows affected
+            return statement.executeUpdate(); 
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting category", e);
         }

@@ -26,14 +26,11 @@ public class UserPage extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }
     
-    private boolean validateFields(String formType) {
-        if(formType.equals("edit") && !txtUserName.getText().equals("") && !txtEmail.getText().equals("") && !txtPassword.getText().equals("")) {
+    private boolean validateFields() {
+        if (txtUserName.getText().trim().isEmpty() || txtEmail.getText().trim().isEmpty() || txtPassword.getText().trim().isEmpty()) {
             return false;
-        } else if(formType.equals("new") && !txtUserName.getText().equals("") && !txtEmail.getText().equals("") && !txtPassword.getText().equals("")) {
-            return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**
@@ -81,10 +78,7 @@ public class UserPage extends javax.swing.JFrame {
         userTable.setForeground(new java.awt.Color(0, 0, 0));
         userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Name", "Password", "Email"
@@ -102,7 +96,7 @@ public class UserPage extends javax.swing.JFrame {
 
         jLable1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLable1.setForeground(new java.awt.Color(0, 0, 0));
-        jLable1.setText("User Name");
+        jLable1.setText("Name");
         getContentPane().add(jLable1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
 
         txtUserName.setBackground(new java.awt.Color(255, 255, 255));
@@ -112,20 +106,20 @@ public class UserPage extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Password");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, -1));
 
         txtPassword.setBackground(new java.awt.Color(255, 255, 255));
         txtPassword.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 200, 340, 30));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, 340, 30));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Email");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 260, 37, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 270, 37, -1));
 
         txtEmail.setBackground(new java.awt.Color(255, 255, 255));
         txtEmail.setForeground(new java.awt.Color(0, 0, 0));
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 280, 340, 30));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 290, 340, 30));
 
         btnSave.setBackground(new java.awt.Color(0, 0, 102));
         btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -136,7 +130,7 @@ public class UserPage extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, -1, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, 340, -1));
 
         btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -147,7 +141,7 @@ public class UserPage extends javax.swing.JFrame {
                 btnUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, -1, -1));
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 380, 340, -1));
 
         btnReset.setBackground(new java.awt.Color(0, 0, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -158,7 +152,7 @@ public class UserPage extends javax.swing.JFrame {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 350, -1, -1));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 410, 340, -1));
 
         btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -169,7 +163,7 @@ public class UserPage extends javax.swing.JFrame {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 350, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 440, 340, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 70));
@@ -194,19 +188,33 @@ public class UserPage extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) userTable.getModel(); // Lấy model từ bảng userTable
+    DefaultTableModel model = (DefaultTableModel) userTable.getModel(); // Lấy model từ bảng userTable
+    try {
+        Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement("SELECT user_id, username, password, email FROM User");
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("user_id"), 
+                rs.getString("username"), 
+                rs.getString("password"), 
+                rs.getString("email")
+            });
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
         try {
             Connection con = DBConnection.getConnection();
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM User WHERE role='Staff'"); // Sửa lỗi câu lệnh SQL
-            while (rs.next()) {
-                model.addRow(new Object[]{rs.getString("user_id"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("role")});
-            }
+            if (st != null) st.close();
+            if (con != null) con.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex);
         }
-        catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-        btnUpdate.setEnabled(false);
+    }
+    btnUpdate.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -214,26 +222,26 @@ public class UserPage extends javax.swing.JFrame {
         String password = txtPassword.getText();
         String email = txtEmail.getText();
 
-        if (validateFields("new")) {
+        if (!validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
-        } else {
-            try {
-                UserDAO userDAO = UserDAO.getInstance();
-                int userId = userDAO.generateUserId(); // Sinh ID người dùng mới
-                User user = new User(userId, username, password, email); // Tạo đối tượng User
+            return;
+        }
 
-                int result = userDAO.insert(user); // Thêm người dùng vào cơ sở dữ liệu
+        try {
+            UserDAO userDAO = UserDAO.getInstance();
+            int userId = userDAO.generateUserId();
+            User user = new User(userId, username, password, email);
 
-                if (result > 0) {
-                    JOptionPane.showMessageDialog(null, "User added successfully");
-                    setVisible(false);
-                    new UserPage().setVisible(true); // Chuyển trang sau khi thêm
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to add user");
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+            int result = userDAO.insert(user);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(null, "User added successfully");
+                setVisible(false);
+                new UserPage().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to add user");
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -268,25 +276,22 @@ public class UserPage extends javax.swing.JFrame {
         String username = txtUserName.getText();
         String email = txtEmail.getText();
 
-        if (validateFields("edit")) {
+        if (!validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
-        } else {
-            try {
-                UserDAO userDAO = UserDAO.getInstance();
-                User user = new User(user_id, username, null, email); // Cập nhật user, bỏ qua password (không thay đổi)
+            return;
+        }
 
-                int result = userDAO.update(user); // Cập nhật thông tin người dùng trong cơ sở dữ liệu
-
-                if (result > 0) {
-                    JOptionPane.showMessageDialog(null, "User updated successfully");
-                    setVisible(false);
-                    new UserPage().setVisible(true); // Chuyển trang sau khi cập nhật
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to update user");
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage());
+        try {
+            User user = new User(user_id, username, null, email);
+            int result = UserDAO.getInstance().update(user);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(null, "User updated successfully");
+                refreshTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to update user");
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -361,6 +366,12 @@ public class UserPage extends javax.swing.JFrame {
         });
     }
 
+    private void refreshTable() {
+        DefaultTableModel model = (DefaultTableModel) userTable.getModel();
+        model.setRowCount(0); // Clear existing rows
+        formComponentShown(null); // Re-fetch data
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
     private javax.swing.JButton btnClose;

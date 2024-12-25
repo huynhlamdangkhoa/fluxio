@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import service.Trie;
 import util.DBConnection;
 
 public class ProductDAO implements DAOInterface<Product> {
+    private Trie trie = new Trie();
     private static final HashSet<Integer> usedProductIds = new HashSet<>();
 
     public static ProductDAO getInstance() {
@@ -20,7 +22,7 @@ public class ProductDAO implements DAOInterface<Product> {
         Random random = new Random();
         int productId;
         do {
-            productId = 100000 + random.nextInt(900000); // Tạo số từ 100000 đến 999999
+            productId = 100 + random.nextInt(999); // Tạo số từ 100000 đến 999999
         } while (usedProductIds.contains(productId) || idExistsInDatabase(productId));
         usedProductIds.add(productId);
         return productId;
@@ -52,7 +54,15 @@ public class ProductDAO implements DAOInterface<Product> {
             statement.setDouble(4, product.getPrice());
             statement.setInt(5, product.getQuantity());
             statement.setString(6, product.getDescription());
-            return statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        product.setProductId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+            return rowsAffected;
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting product", e);
         }
@@ -181,5 +191,12 @@ public class ProductDAO implements DAOInterface<Product> {
             throw new RuntimeException("Error searching products by name", e);
         }
         return (ArrayList<Product>) products;
+    }
+    
+        public void buildTrieFromProductNames() {
+        List<Product> allProducts = selectAll();  // Get all products from the database
+        for (Product product : allProducts) {
+            trie.insert(product.getProductName().toLowerCase());  // Insert product names to the Trie
+        }
     }
 }

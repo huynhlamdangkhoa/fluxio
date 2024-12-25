@@ -1,10 +1,12 @@
 package GUI;
 
+import DAO.CategoryDAO;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
+import model.Category;
 import util.DBConnection;
 
 
@@ -45,12 +47,15 @@ public class CategoryPage extends javax.swing.JFrame {
         categoryTable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         txtCategoryName = new javax.swing.JTextField();
-        back = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnSave1 = new javax.swing.JButton();
+        txtCategorydelete = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        delete = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         jLabel3.setText("jLabel3");
@@ -73,7 +78,7 @@ public class CategoryPage extends javax.swing.JFrame {
         categoryTable.setForeground(new java.awt.Color(0, 0, 0));
         categoryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
                 "ID", "Category Name"
@@ -97,17 +102,6 @@ public class CategoryPage extends javax.swing.JFrame {
         txtCategoryName.setForeground(new java.awt.Color(0, 0, 0));
         getContentPane().add(txtCategoryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 140, 342, 30));
 
-        back.setBackground(new java.awt.Color(255, 102, 0));
-        back.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        back.setForeground(new java.awt.Color(255, 255, 255));
-        back.setText("Back to Home");
-        back.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backActionPerformed(evt);
-            }
-        });
-        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 560, -1, -1));
-
         btnUpdate.setBackground(new java.awt.Color(0, 0, 102));
         btnUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
@@ -117,7 +111,7 @@ public class CategoryPage extends javax.swing.JFrame {
                 btnUpdateActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, -1, -1));
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 220, 340, -1));
 
         btnReset.setBackground(new java.awt.Color(0, 0, 102));
         btnReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -128,7 +122,7 @@ public class CategoryPage extends javax.swing.JFrame {
                 btnResetActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, -1, -1));
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, 340, -1));
 
         btnClose.setBackground(new java.awt.Color(0, 0, 102));
         btnClose.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -139,7 +133,7 @@ public class CategoryPage extends javax.swing.JFrame {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 200, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 280, 340, -1));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 850, 60));
@@ -153,7 +147,38 @@ public class CategoryPage extends javax.swing.JFrame {
                 btnSave1ActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, -1));
+        getContentPane().add(btnSave1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 190, 340, -1));
+
+        txtCategorydelete.setBackground(new java.awt.Color(255, 255, 255));
+        txtCategorydelete.setForeground(new java.awt.Color(0, 0, 0));
+        getContentPane().add(txtCategorydelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 410, 342, 30));
+
+        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Delete Category by ID");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 390, -1, -1));
+
+        delete.setBackground(new java.awt.Color(0, 0, 102));
+        delete.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        delete.setForeground(new java.awt.Color(255, 255, 255));
+        delete.setText("Delete");
+        delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteActionPerformed(evt);
+            }
+        });
+        getContentPane().add(delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 460, 340, -1));
+
+        back.setBackground(new java.awt.Color(255, 102, 0));
+        back.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        back.setForeground(new java.awt.Color(255, 255, 255));
+        back.setText("Back to Home");
+        back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backActionPerformed(evt);
+            }
+        });
+        getContentPane().add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 560, 120, -1));
 
         jPanel2.setBackground(java.awt.SystemColor.controlHighlight);
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 850, 540));
@@ -178,31 +203,6 @@ public class CategoryPage extends javax.swing.JFrame {
         
         btnUpdate.setEnabled(false);
     }//GEN-LAST:event_formComponentShown
-
-    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        PageGraph pageGraph = PageGraph.getInstance();
-        List<String> adjacentPages = pageGraph.getAdjacentPages("CategoryPage");
-
-        System.out.println("Adjacent pages for CategoryPage: " + adjacentPages);
-
-        boolean homePageFound = false;
-        for (String nextPage : adjacentPages) {
-            System.out.println("Checking page: " + nextPage);  
-
-            if (nextPage.equals("HomePage")) { 
-                homePageFound = true;
-                System.out.println("homePageFound found! Navigating back to home...");  
-                HomePage homePage = new HomePage();
-                homePage.setVisible(true);
-                this.setVisible(false);  
-                break;  //
-            }
-        }
-
-        if (!homePageFound) {
-            System.out.println("HomePage not found in adjacent pages.");  // Debug if UserPage was not found
-        }
-    }//GEN-LAST:event_backActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         // TODO add your handling code here:
@@ -234,40 +234,88 @@ public class CategoryPage extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "All fields are required");
             return;
         }
-        try {
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE Category SET category_name=? WHERE category_id=?");
-            ps.setString(1, categoryName);
-            ps.setInt(2, categoryId);
-            ps.executeUpdate();
+
+        Category category = new Category(categoryId, categoryName); // Using the selected category ID
+        CategoryDAO categoryDAO = CategoryDAO.getInstance();
+        int result = categoryDAO.update(category);
+
+        if (result > 0) {
             JOptionPane.showMessageDialog(null, "Category updated successfully");
-            con.close();
-            setVisible(false);
-            new CategoryPage().setVisible(true);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error updating category");
         }
+        refreshCategoryTable();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnSave1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSave1ActionPerformed
-        String categoryName = txtCategoryName.getText();
+         String categoryName = txtCategoryName.getText();
         if (!validateFields()) {
             JOptionPane.showMessageDialog(null, "All fields are required");
             return;
         }
-        try {
-            Connection con = DBConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Category (category_name) VALUES (?)");
-            ps.setString(1, categoryName);
-            ps.executeUpdate();
+
+        Category category = new Category(0, categoryName);  // 0 indicates a new category without ID
+        CategoryDAO categoryDAO = CategoryDAO.getInstance();
+        int result = categoryDAO.insert(category);
+
+        if (result > 0) {
             JOptionPane.showMessageDialog(null, "Category added successfully");
-            con.close();
-            setVisible(false);
-            new CategoryPage().setVisible(true);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        } else {
+            JOptionPane.showMessageDialog(null, "Error adding category");
         }
+        refreshCategoryTable();
     }//GEN-LAST:event_btnSave1ActionPerformed
+
+    private void deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteActionPerformed
+        // TODO add your handling code here:
+        String categoryIdStr = txtCategorydelete.getText().trim();
+        if (categoryIdStr.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter a category ID");
+            return;
+        }
+
+        try {
+            int categoryId = Integer.parseInt(categoryIdStr);
+            Category category = new Category(categoryId, null);  // Category name is null for deletion
+            CategoryDAO categoryDAO = CategoryDAO.getInstance();
+            int result = categoryDAO.delete(category);
+
+            if (result > 0) {
+                JOptionPane.showMessageDialog(null, "Category deleted successfully");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error deleting category");
+            }
+            refreshCategoryTable();  // To update the table after deletion
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid category ID");
+        }
+    }//GEN-LAST:event_deleteActionPerformed
+
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        // TODO add your handling code here:
+        PageGraph pageGraph = PageGraph.getInstance();
+        List<String> adjacentPages = pageGraph.getAdjacentPages("CategoryPage");
+
+        System.out.println("Adjacent pages for CategoryPage: " + adjacentPages);
+
+        boolean homePageFound = false;
+        for (String nextPage : adjacentPages) {
+            System.out.println("Checking page: " + nextPage);  
+
+            if (nextPage.equals("HomePage")) { 
+                homePageFound = true;
+                System.out.println("homePageFound found! Navigating back to home...");  
+                HomePage homePage = new HomePage();
+                homePage.setVisible(true);
+                this.setVisible(false);  
+                break;  //
+            }
+        }
+
+        if (!homePageFound) {
+            System.out.println("HomePage not found in adjacent pages.");  // Debug if UserPage was not found
+        }
+    }//GEN-LAST:event_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -304,6 +352,19 @@ public class CategoryPage extends javax.swing.JFrame {
         });
     }
 
+    private void refreshCategoryTable() {
+        DefaultTableModel model = (DefaultTableModel) categoryTable.getModel();
+        model.setRowCount(0);  // Clear the table
+        try {
+            List<Category> categories = CategoryDAO.getInstance().selectAll();
+            for (Category category : categories) {
+                model.addRow(new Object[]{category.getCategoryId(), category.getCategoryName()});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton back;
     private javax.swing.JButton btnClose;
@@ -311,12 +372,15 @@ public class CategoryPage extends javax.swing.JFrame {
     private javax.swing.JButton btnSave1;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JTable categoryTable;
+    private javax.swing.JButton delete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txtCategoryName;
+    private javax.swing.JTextField txtCategorydelete;
     // End of variables declaration//GEN-END:variables
 }

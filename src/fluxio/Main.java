@@ -6,15 +6,14 @@ import GUI.HomePage;
 import GUI.SignUpPage;
 import util.DBConnection;
 import java.sql.Connection;
-import javax.swing.JFrame;
 
 public class Main {
     public static void main(String[] args) {
-        HomePage HomePage = new HomePage();
-        HomePage.setVisible(true);
-        HomePage.pack();
-        HomePage.setLocationRelativeTo(null);
-
+        SignUpPage signUpPage = new SignUpPage();
+        signUpPage.setVisible(true);
+        signUpPage.pack();
+        signUpPage.setLocationRelativeTo(null);
+        
         Connection connection = DBConnection.getConnection();
         DBConnection.printInfo(connection);
 

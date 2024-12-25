@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import util.DBConnection;
 import model.User;
 
 public class UserDAO implements DAOInterface<User> {
@@ -20,7 +19,7 @@ public class UserDAO implements DAOInterface<User> {
         Random random = new Random();
         int userId;
         do {
-            userId = 10000 + random.nextInt(90000); // Generates a number between 100 and 999
+            userId = 10000 + random.nextInt(99999); 
         } while (usedUserIds.contains(userId));
         usedUserIds.add(userId);
         return userId;
@@ -28,15 +27,23 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public int insert(User user) {
-        String sql = "INSERT IGNORE INTO User (username, password, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO User (user_id, username, password, email) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1, generateUserId());
+            statement.setString(2, user.getUsername());
+            statement.setString(3, user.getPassword());
+            statement.setString(4, user.getEmail());
 
-            statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
-            statement.setString(3, user.getEmail());
-
-            return statement.executeUpdate(); 
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        user.setUserId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+            return rowsAffected;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,16 +52,15 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public int update(User user) {
-        String sql = "UPDATE User SET username=?, password=?, email=?, WHERE user_id=?";
+        String sql = "UPDATE User SET username=?, password=?, email=? WHERE user_id=?";
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getEmail());
-            statement.setInt(5, user.getUserId());
+            statement.setInt(4, user.getUserId());
 
-            return statement.executeUpdate(); 
+            return statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,7 +74,7 @@ public class UserDAO implements DAOInterface<User> {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, user.getUserId());
-            return statement.executeUpdate(); 
+            return statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,63 +83,63 @@ public class UserDAO implements DAOInterface<User> {
 
     @Override
     public ArrayList<User> selectAll() {
-        List<User> user = new ArrayList<>();
+        ArrayList<User> users = new ArrayList<>();
         String sql = "SELECT * FROM User";
         try (Connection connection = DBConnection.getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
-                int id = resultSet.getInt("user_id");
-                String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                user.add(new User(id, username, password, email));
+                users.add(mapResultSetToUser(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return (ArrayList<User>) user;
+        return users;
     }
 
     @Override
     public User selectById(User user) {
         String sql = "SELECT * FROM User WHERE user_id=?";
         try (Connection connection = DBConnection.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setInt(1, user.getUserId()); 
+            statement.setInt(1, user.getUserId());
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("user_id");
-                    String username = resultSet.getString("username");
-                    String password = resultSet.getString("password");
-                    String email = resultSet.getString("email");
-                    return new User(id, username, password, email);
+                    return mapResultSetToUser(resultSet);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; 
+        return null;
     }
 
-    public ArrayList<User> selectByCondition(String condition) {
-                String sql = "SELECT * FROM Users WHERE " + condition; // Note: Be cautious of SQL injection risks.
-        ArrayList<User> user = new ArrayList<>();
+    public ArrayList<User> selectByCondition(String columnName, String value) {
+        String sql = "SELECT * FROM User WHERE " + columnName + "=?";
+        ArrayList<User> users = new ArrayList<>();
         try (Connection connection = DBConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
-            while (resultSet.next()) {
-                int id = resultSet.getInt("user_id");
-                String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
-                String email = resultSet.getString("email");
-                user.add(new User(id, username, password, email));
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, value);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    users.add(mapResultSetToUser(resultSet));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return (ArrayList<User>) user;
+        return users;
+    }
+
+    private User mapResultSetToUser(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("user_id");
+        String username = resultSet.getString("username");
+        String password = resultSet.getString("password");
+        String email = resultSet.getString("email");
+        return new User(id, username, password, email);
     }
 }
