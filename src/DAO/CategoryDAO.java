@@ -60,8 +60,8 @@ public class CategoryDAO implements DAOInterface<Category> {
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, category.getCategoryName());
-            statement.setInt(2, category.getCategoryId()); // Use existing ID
-            return statement.executeUpdate(); // Return rows affected
+            statement.setInt(2, category.getCategoryId()); 
+            return statement.executeUpdate(); 
         } catch (SQLException e) {
             throw new RuntimeException("Error updating category", e);
         }
@@ -73,7 +73,7 @@ public class CategoryDAO implements DAOInterface<Category> {
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, category.getCategoryId());
-            return statement.executeUpdate(); // Return rows affected
+            return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting category", e);
         }
@@ -94,7 +94,7 @@ public class CategoryDAO implements DAOInterface<Category> {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all categories", e);
         }
-        return categories; // Return the populated list
+        return categories; 
     }
 
     @Override
@@ -113,6 +113,6 @@ public class CategoryDAO implements DAOInterface<Category> {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving category by ID", e);
         }
-        return null; // Return null if not found
+        return null; 
     }
 }
